@@ -1,20 +1,13 @@
-SWFTools-Core
-=============
+[![Release](https://jitpack.io/v/umjammer/vavi-apps-swftools.svg)](https://jitpack.io/#umjammer/vavi-apps-swftools)
+[![Java CI](https://github.com/umjammer/vavi-apps-swftools/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-apps-swftools/actions/workflows/maven.yml)
+[![CodeQL](https://github.com/umjammer/vavi-apps-swftools/actions/workflows/codeql.yml/badge.svg)](https://github.com/umjammer/vavi-apps-swftools/actions/workflows/codeql.yml)
+![Java](https://img.shields.io/badge/Java-8-b07219)
 
-This is a SWF decompiler and basic player.  In the past this product was know as Flash Exploit and it had a pay wall for certain features.  The code has been gathering dust since 2006, so I'm pushing it onto the web for others to play with.  And for a warning, the code is old and messy, it needs better structuring and coding standards.
+# SWFTools-Core
 
-Java Target  
-------------
+This is a SWF decompiler and basic player.
+In the past this product was know as Flash Exploit and it had a pay wall for certain features.
+The code has been gathering dust since 2006, so I'm pushing it onto the web for others to play with.
+And for a warning, the code is old and messy, it needs better structuring and coding standards.
 
-Java 6
-
-Running the Main Program
-=============
-
-1) Setup a "working" directory and add an empty folder called "Plugins"
-2) Run the class *com.mgatelabs.swftools.FlashExploitGui* and make sure you properly setup the working path.  It's also a good idea to give the program a bit more ram.
-
-Dependencies
-=============
-
-1) None, everything was included
+[original](https://github.com/mgatelabs/SWFTools-Core)

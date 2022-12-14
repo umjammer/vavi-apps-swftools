@@ -1,0 +1,29 @@
+/*
+    Copyright M-Gate Labs 2007
+    Can be edited with permission only.
+*/
+
+package com.mgatelabs.swftools.support.swf.objects;
+
+import com.mgatelabs.swftools.support.swf.tags.Tag;
+
+import java.util.Vector;
+
+// Every Movie Object is Based off this Interface
+
+public interface FMovieInterface {
+    // Get the Origonal Clip, that contains all of the objects
+    FMovie getCore();
+
+    // General
+    int getID();
+
+    long getFrameCount();
+
+    String toString();
+
+    // Animation Tags
+    Vector getTags();
+
+    void addTag(Tag tag);
+}
