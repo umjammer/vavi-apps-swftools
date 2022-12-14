@@ -7,6 +7,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.util.Vector;
 
+
 public class FStyle {
     private Vector myLineStyles;
     private Vector myFillStyles;

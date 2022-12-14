@@ -3,25 +3,29 @@
  */
 
 /**
- <p>
- <b>Image Tag Reader</b>
- </p>
- <p>
- Used to process image tags.
- </p>
+ * <p>
+ * <b>Image Tag Reader</b>
+ * </p>
+ * <p>
+ * Used to process image tags.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
+
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import com.mgatelabs.swftools.support.swf.objects.FBitmap;
 import com.mgatelabs.swftools.support.swf.objects.FColor;
 import com.mgatelabs.swftools.support.swf.objects.FLossless;
 
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 public class TagReaderImage {
     private BitInput bi;
@@ -176,7 +180,7 @@ public class TagReaderImage {
                                     ((bitTable[x + 1] & 0xFF) == 0xd9) &&
                                     ((bitTable[x + 2] & 0xFF) == 0xFF) &&
                                     ((bitTable[x + 3] & 0xFF) == 0xd8)
-                            ) {
+                    ) {
                         removePosition = x;
                         break;
                     }

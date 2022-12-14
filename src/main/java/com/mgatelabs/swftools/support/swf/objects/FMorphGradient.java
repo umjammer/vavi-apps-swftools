@@ -7,6 +7,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.util.Vector;
 
+
 public class FMorphGradient extends FFill {
       /*
           GradientMatrix        	      If type = 0x10 or 0x12 MATRIX         	      Matrix for gradient fill

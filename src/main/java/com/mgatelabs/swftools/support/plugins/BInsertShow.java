@@ -1,4 +1,5 @@
 // Set the Package Location
+
 package com.mgatelabs.swftools.support.plugins;
 
 // Get Color

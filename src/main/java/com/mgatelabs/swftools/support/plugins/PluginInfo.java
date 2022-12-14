@@ -1,10 +1,11 @@
 package com.mgatelabs.swftools.support.plugins;
 
-import com.mgatelabs.swftools.support.xml.XMLHash;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.Hashtable;
+
+import com.mgatelabs.swftools.support.xml.XMLHash;
+
 
 public class PluginInfo {
     public String name;

@@ -3,17 +3,18 @@
  */
 
 /**
- <p>
- <b>Flash Tag Block</b>
- </p>
- <p>
- Used to hold a Flash Tag Block.  Each swf file is made up of many blocks.
- </p>
+ * <p>
+ * <b>Flash Tag Block</b>
+ * </p>
+ * <p>
+ * Used to hold a Flash Tag Block.  Each swf file is made up of many blocks.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.tags;
 
 import java.util.Vector;
+
 
 public class TBlock {
 

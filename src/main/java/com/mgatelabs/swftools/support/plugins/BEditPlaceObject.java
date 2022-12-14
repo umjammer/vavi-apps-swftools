@@ -1,19 +1,34 @@
 // Set the Package Location
+
 package com.mgatelabs.swftools.support.plugins;
 
 // Get Color
 
-import com.mgatelabs.swftools.exploit.hook.BlockEditInterface;
-import com.mgatelabs.swftools.support.swf.io.*;
-import com.mgatelabs.swftools.support.swf.objects.FMatrix;
-import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
-import com.mgatelabs.swftools.support.swf.tags.TBlock;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import com.mgatelabs.swftools.exploit.hook.BlockEditInterface;
+import com.mgatelabs.swftools.support.swf.io.BitInput;
+import com.mgatelabs.swftools.support.swf.io.BitLibrary;
+import com.mgatelabs.swftools.support.swf.io.BitOutput;
+import com.mgatelabs.swftools.support.swf.io.FlashFilter;
+import com.mgatelabs.swftools.support.swf.io.TagReader;
+import com.mgatelabs.swftools.support.swf.io.TypeReader;
+import com.mgatelabs.swftools.support.swf.io.TypeWriter;
+import com.mgatelabs.swftools.support.swf.objects.FMatrix;
+import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
+import com.mgatelabs.swftools.support.swf.tags.TBlock;
 
 // Flash IO
 // Get Exploit Hooks

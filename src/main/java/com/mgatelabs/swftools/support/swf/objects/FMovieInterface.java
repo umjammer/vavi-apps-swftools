@@ -5,9 +5,9 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import com.mgatelabs.swftools.support.swf.tags.Tag;
-
 import java.util.Vector;
+
+import com.mgatelabs.swftools.support.swf.tags.Tag;
 
 // Every Movie Object is Based off this Interface
 

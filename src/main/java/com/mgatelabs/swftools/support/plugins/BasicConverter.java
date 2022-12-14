@@ -1,12 +1,25 @@
 package com.mgatelabs.swftools.support.plugins;
 
-import com.mgatelabs.swftools.exploit.conversion.*;
-import com.mgatelabs.swftools.exploit.render.AdvancedPath;
-import com.mgatelabs.swftools.support.swf.objects.*;
-
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.util.Vector;
+
+import com.mgatelabs.swftools.exploit.conversion.Converter;
+import com.mgatelabs.swftools.exploit.conversion.RBase;
+import com.mgatelabs.swftools.exploit.conversion.RCurve;
+import com.mgatelabs.swftools.exploit.conversion.REdge;
+import com.mgatelabs.swftools.exploit.conversion.RGraph;
+import com.mgatelabs.swftools.exploit.conversion.RNode;
+import com.mgatelabs.swftools.exploit.render.AdvancedPath;
+import com.mgatelabs.swftools.support.swf.objects.FEdge;
+import com.mgatelabs.swftools.support.swf.objects.FFill;
+import com.mgatelabs.swftools.support.swf.objects.FFont;
+import com.mgatelabs.swftools.support.swf.objects.FLine;
+import com.mgatelabs.swftools.support.swf.objects.FMovie;
+import com.mgatelabs.swftools.support.swf.objects.FShape;
+import com.mgatelabs.swftools.support.swf.objects.FStyle;
+import com.mgatelabs.swftools.support.swf.objects.FStyleChange;
+
 
 public class BasicConverter implements Converter, Plugin {
     private int myTotal;
@@ -436,18 +449,18 @@ public class BasicConverter implements Converter, Plugin {
                     while (!pi.isDone()) {
                         //System.out.println("Conversion Path");
                         switch (pi.currentSegment(floatArray)) {
-                            case PathIterator.SEG_CLOSE:
-                                aPath.closePath();
-                                break;
-                            case PathIterator.SEG_QUADTO:
-                                aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
-                                break;
-                            case PathIterator.SEG_LINETO:
-                                aPath.lineTo(floatArray[0], floatArray[1]);
-                                break;
-                            case PathIterator.SEG_MOVETO:
-                                aPath.moveTo(floatArray[0], floatArray[1]);
-                                break;
+                        case PathIterator.SEG_CLOSE:
+                            aPath.closePath();
+                            break;
+                        case PathIterator.SEG_QUADTO:
+                            aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
+                            break;
+                        case PathIterator.SEG_LINETO:
+                            aPath.lineTo(floatArray[0], floatArray[1]);
+                            break;
+                        case PathIterator.SEG_MOVETO:
+                            aPath.moveTo(floatArray[0], floatArray[1]);
+                            break;
                         } // End Case
                         pi.next();
                     } // End While
@@ -518,18 +531,18 @@ public class BasicConverter implements Converter, Plugin {
                         while (!pi.isDone()) {
                             //System.out.println("Conversion Path");
                             switch (pi.currentSegment(floatArray)) {
-                                case PathIterator.SEG_CLOSE:
-                                    aPath.closePath();
-                                    break;
-                                case PathIterator.SEG_QUADTO:
-                                    aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
-                                    break;
-                                case PathIterator.SEG_LINETO:
-                                    aPath.lineTo(floatArray[0], floatArray[1]);
-                                    break;
-                                case PathIterator.SEG_MOVETO:
-                                    aPath.moveTo(floatArray[0], floatArray[1]);
-                                    break;
+                            case PathIterator.SEG_CLOSE:
+                                aPath.closePath();
+                                break;
+                            case PathIterator.SEG_QUADTO:
+                                aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
+                                break;
+                            case PathIterator.SEG_LINETO:
+                                aPath.lineTo(floatArray[0], floatArray[1]);
+                                break;
+                            case PathIterator.SEG_MOVETO:
+                                aPath.moveTo(floatArray[0], floatArray[1]);
+                                break;
                             }
 
                             pi.next();

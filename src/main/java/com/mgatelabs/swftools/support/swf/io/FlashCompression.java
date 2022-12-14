@@ -3,23 +3,28 @@
  */
 
 /**
- <p>
- <b>Flash Decompressor</b>
- </p>
- <p>
- Used to quickly Decompress flash/svg files.
- </p>
- <p>
- Compression of flash/svg files should be added.
- </p>
+ * <p>
+ * <b>Flash Decompressor</b>
+ * </p>
+ * <p>
+ * Used to quickly Decompress flash/svg files.
+ * </p>
+ * <p>
+ * Compression of flash/svg files should be added.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
+
 
 public class FlashCompression {
     public static boolean uncompressSVGZ(File svgz, File svg) {

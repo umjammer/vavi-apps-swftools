@@ -3,24 +3,25 @@
  */
 
 /**
- <p>
- <b>Binary Input Class</b>
- </p>
- <p>
- Used to process flash files at the bit level.
- </p>
+ * <p>
+ * <b>Binary Input Class</b>
+ * </p>
+ * <p>
+ * Used to process flash files at the bit level.
+ * </p>
  */
 
 // Set Package
+
 package com.mgatelabs.swftools.support.swf.io;
 
 // Program Infomration
 
-import com.mgatelabs.swftools.exploit.control.AppControl;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
+
+import com.mgatelabs.swftools.exploit.control.AppControl;
 
 // Java I/O
 // Java Compression

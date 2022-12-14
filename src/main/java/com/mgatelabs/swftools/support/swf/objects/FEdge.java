@@ -4,7 +4,7 @@
 */
 
 /**
- A Sigle Line/Edge/Curve
+ * A Sigle Line/Edge/Curve
  */
 
 package com.mgatelabs.swftools.support.swf.objects;

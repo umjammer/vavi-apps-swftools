@@ -2,6 +2,7 @@ package com.mgatelabs.swftools.support.filters;
 
 import java.io.File;
 
+
 public class CommonFileFilter extends javax.swing.filechooser.FileFilter {
     private String endString;
     private String description;

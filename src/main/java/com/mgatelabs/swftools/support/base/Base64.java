@@ -165,18 +165,18 @@ public class Base64 {
 
         int endSize = ((size / 4)) * 3;
         switch (size % 4) {
-            case 0:
+        case 0:
 
-                break;
-            case 1:
+            break;
+        case 1:
 
-                break;
-            case 2:
-                endSize += 1;
-                break;
-            case 3:
-                endSize += 2;
-                break;
+            break;
+        case 2:
+            endSize += 1;
+            break;
+        case 3:
+            endSize += 2;
+            break;
         }
         byte[] data = new byte[endSize];
 

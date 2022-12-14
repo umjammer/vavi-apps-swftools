@@ -3,6 +3,7 @@ package com.mgatelabs.swftools.support.filters;
 import java.io.File;
 import java.io.FileFilter;
 
+
 public class SimpleFileFilter implements FileFilter {
     private String endString;
 

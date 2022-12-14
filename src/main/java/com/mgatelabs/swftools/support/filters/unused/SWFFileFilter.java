@@ -2,6 +2,7 @@ package com.mgatelabs.swftools.support.filters.unused;
 
 import java.io.File;
 
+
 public class SWFFileFilter extends javax.swing.filechooser.FileFilter {
     public boolean accept(File f) {
         return f.toString().toLowerCase().endsWith(".swf") || f.isDirectory();

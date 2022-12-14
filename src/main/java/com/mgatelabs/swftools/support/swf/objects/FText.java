@@ -2,6 +2,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.util.Vector;
 
+
 public class FText implements FID {
     private int myID;
     private int myVersion;

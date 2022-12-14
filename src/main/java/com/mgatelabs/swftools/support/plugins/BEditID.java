@@ -1,13 +1,14 @@
 // Set the Package Location
+
 package com.mgatelabs.swftools.support.plugins;
 
 // Get Color
 
+import javax.swing.JOptionPane;
+
 import com.mgatelabs.swftools.exploit.hook.BlockEditInterface;
 import com.mgatelabs.swftools.support.swf.tags.TBlock;
 import com.mgatelabs.swftools.support.swf.tags.Tag;
-
-import javax.swing.*;
 
 // Get Exploit Hooks
 // Get the Tags

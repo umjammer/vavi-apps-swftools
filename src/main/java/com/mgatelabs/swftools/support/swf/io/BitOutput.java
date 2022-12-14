@@ -3,15 +3,15 @@
  */
 
 /**
- <p>
- <b>Binary Output Class</b>
- </p>
- <p>
- Used to write flash files.
- </p>
- <p>
- Not Complete!  Limited Write Support.
- </p>
+ * <p>
+ * <b>Binary Output Class</b>
+ * </p>
+ * <p>
+ * Used to write flash files.
+ * </p>
+ * <p>
+ * Not Complete!  Limited Write Support.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
@@ -19,6 +19,7 @@ package com.mgatelabs.swftools.support.swf.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.DeflaterOutputStream;
+
 
 public class BitOutput {
     private OutputStream myStream;

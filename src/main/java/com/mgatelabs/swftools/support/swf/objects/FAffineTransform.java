@@ -9,11 +9,12 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+
 
 public class FAffineTransform extends AffineTransform {
     public float[][] table;

@@ -7,10 +7,10 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 // Import in the frame parser
 
-import com.mgatelabs.swftools.support.swf.tools.FrameParser;
-
-import java.awt.*;
+import java.awt.Color;
 import java.util.Vector;
+
+import com.mgatelabs.swftools.support.swf.tools.FrameParser;
 
 // Need color information
 // Need vector information

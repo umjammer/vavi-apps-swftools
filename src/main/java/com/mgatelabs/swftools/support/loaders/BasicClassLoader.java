@@ -3,6 +3,7 @@ package com.mgatelabs.swftools.support.loaders;
 import java.io.File;
 import java.io.FileInputStream;
 
+
 public class BasicClassLoader extends ClassLoader {
 
     public Class findClass(String name, File target) {

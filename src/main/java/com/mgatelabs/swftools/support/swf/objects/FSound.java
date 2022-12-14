@@ -39,21 +39,21 @@ public class FSound implements FID {
         String val = "";
 
         switch (myFormat) {
-            case 0:
-                val = "RAW";
-                break;
-            case 1:
-                val = "ADPCM";
-                break;
-            case 2:
-                val = "MP3";
-                break;
-            case 3:
-                val = "Uncompressed";
-                break;
-            case 4:
-                val = "Nellymoser";
-                break;
+        case 0:
+            val = "RAW";
+            break;
+        case 1:
+            val = "ADPCM";
+            break;
+        case 2:
+            val = "MP3";
+            break;
+        case 3:
+            val = "Uncompressed";
+            break;
+        case 4:
+            val = "Nellymoser";
+            break;
         }
 
         return val;

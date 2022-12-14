@@ -7,6 +7,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.util.Vector;
 
+
 public class FStyleChange {
        /*
          TypeFlag        	      UB[1] = 0        	      Non-edge record flag

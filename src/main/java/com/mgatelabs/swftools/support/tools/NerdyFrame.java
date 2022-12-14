@@ -1,7 +1,11 @@
 package com.mgatelabs.swftools.support.tools;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+
 
 public class NerdyFrame {
     private JFrame frame;

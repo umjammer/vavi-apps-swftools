@@ -5,9 +5,10 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
+import java.util.Vector;
+
 import com.mgatelabs.swftools.support.swf.tags.Tag;
 
-import java.util.Vector;
 
 public class FSprite implements FMovieInterface {
     //Header        	     RECORDHEADER      Tag ID = 39

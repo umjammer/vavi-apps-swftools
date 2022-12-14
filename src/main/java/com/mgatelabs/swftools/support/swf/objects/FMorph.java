@@ -11,6 +11,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.util.Vector;
 
+
 public class FMorph {
     private int myFormat;
     private int myShapeID;

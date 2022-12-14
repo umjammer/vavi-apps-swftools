@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
+
 public class InternetRequest {
 
     public static String request(String link) {

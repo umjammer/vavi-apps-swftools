@@ -11,9 +11,10 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 // Need Vector Support
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import javax.imageio.ImageIO;
+
 
 public class FBitmap implements FID, FImage {
     public static final int VER1 = 1;

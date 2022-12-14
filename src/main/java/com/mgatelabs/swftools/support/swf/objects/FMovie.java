@@ -1,10 +1,11 @@
 package com.mgatelabs.swftools.support.swf.objects;
 
-import com.mgatelabs.swftools.support.swf.tags.Tag;
-
-import java.awt.*;
+import java.awt.Color;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import com.mgatelabs.swftools.support.swf.tags.Tag;
+
 
 public class FMovie implements FMovieInterface {
     // The Flash Object Must Contain Information

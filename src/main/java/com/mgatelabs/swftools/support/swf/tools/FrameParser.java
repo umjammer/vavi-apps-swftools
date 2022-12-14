@@ -3,12 +3,12 @@
  */
 
 /**
- <p>
- <b>Frame Parser</b>
- </p>
- <p>
- Used to advance a movie object's frame.
- </p>
+ * <p>
+ * <b>Frame Parser</b>
+ * </p>
+ * <p>
+ * Used to advance a movie object's frame.
+ * </p>
  */
 
 
@@ -16,12 +16,16 @@ package com.mgatelabs.swftools.support.swf.tools;
 
 // Get flash Objects
 
-import com.mgatelabs.swftools.support.swf.objects.*;
+import java.util.Vector;
+
+import com.mgatelabs.swftools.support.swf.objects.FColor;
+import com.mgatelabs.swftools.support.swf.objects.FDisplayListItem;
+import com.mgatelabs.swftools.support.swf.objects.FMovie;
+import com.mgatelabs.swftools.support.swf.objects.FMovieData;
+import com.mgatelabs.swftools.support.swf.objects.FMovieInterface;
 import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
 import com.mgatelabs.swftools.support.swf.tags.RemoveObject;
 import com.mgatelabs.swftools.support.swf.tags.Tag;
-
-import java.util.Vector;
 
 // Get flash Tags
 // Need Vector support

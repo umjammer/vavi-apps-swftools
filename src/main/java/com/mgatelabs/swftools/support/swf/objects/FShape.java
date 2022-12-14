@@ -9,6 +9,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.util.Vector;
 
+
 public class FShape implements FID {
     // Static Vars
     public static final int VER1 = 1;

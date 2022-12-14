@@ -3,12 +3,12 @@
  */
 
 /**
- <p>
- <b>Flash Filter</b>
- </p>
- <p>
- Used to determine what to skip while parsing a flash file.  <b>Ex</b>. Disable sounds, bitmaps, fonts shapes.
- </p>
+ * <p>
+ * <b>Flash Filter</b>
+ * </p>
+ * <p>
+ * Used to determine what to skip while parsing a flash file.  <b>Ex</b>. Disable sounds, bitmaps, fonts shapes.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;

@@ -3,21 +3,21 @@
  */
 
 /**
- <p>
- <b>Flash Reader</b>
- </p>
- <p>
- Used to parse the movie information before the tags begin.
- </p>
+ * <p>
+ * <b>Flash Reader</b>
+ * </p>
+ * <p>
+ * Used to parse the movie information before the tags begin.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
 
-import com.mgatelabs.swftools.support.swf.objects.FMovie;
-import com.mgatelabs.swftools.support.swf.objects.FRect;
-
 import java.io.File;
 import java.nio.file.Files;
+
+import com.mgatelabs.swftools.support.swf.objects.FMovie;
+import com.mgatelabs.swftools.support.swf.objects.FRect;
 
 
 public class FlashReader {

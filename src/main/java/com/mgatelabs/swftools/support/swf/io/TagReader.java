@@ -3,28 +3,48 @@
  */
 
 /**
- <p>
- <b>Binary Input Class</b>
- </p>
- <p>
- Used to process flash files at the tag level.
- </p>
-
- <p>
- Messy Code
- </p>
+ * <p>
+ * <b>Binary Input Class</b>
+ * </p>
+ * <p>
+ * Used to process flash files at the tag level.
+ * </p>
+ *
+ * <p>
+ * Messy Code
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
 
+import java.io.IOException;
+import java.util.Vector;
+
 import com.mgatelabs.swftools.exploit.control.AppControl;
-import com.mgatelabs.swftools.support.swf.objects.*;
+import com.mgatelabs.swftools.support.swf.objects.FBitmap;
+import com.mgatelabs.swftools.support.swf.objects.FColor;
+import com.mgatelabs.swftools.support.swf.objects.FEdge;
+import com.mgatelabs.swftools.support.swf.objects.FFont;
+import com.mgatelabs.swftools.support.swf.objects.FImage;
+import com.mgatelabs.swftools.support.swf.objects.FLine;
+import com.mgatelabs.swftools.support.swf.objects.FLossless;
+import com.mgatelabs.swftools.support.swf.objects.FMorph;
+import com.mgatelabs.swftools.support.swf.objects.FMovie;
+import com.mgatelabs.swftools.support.swf.objects.FMovieInterface;
+import com.mgatelabs.swftools.support.swf.objects.FRect;
+import com.mgatelabs.swftools.support.swf.objects.FShape;
+import com.mgatelabs.swftools.support.swf.objects.FSound;
+import com.mgatelabs.swftools.support.swf.objects.FSprite;
+import com.mgatelabs.swftools.support.swf.objects.FStyle;
+import com.mgatelabs.swftools.support.swf.objects.FStyleChange;
+import com.mgatelabs.swftools.support.swf.objects.FText;
+import com.mgatelabs.swftools.support.swf.objects.FTextGlyph;
+import com.mgatelabs.swftools.support.swf.objects.FTextRecord;
+import com.mgatelabs.swftools.support.swf.objects.FTexture;
 import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
 import com.mgatelabs.swftools.support.swf.tags.RemoveObject;
 import com.mgatelabs.swftools.support.swf.tags.Tag;
 
-import java.io.IOException;
-import java.util.Vector;
 
 public class TagReader {
 
@@ -124,271 +144,271 @@ public class TagReader {
             endByte = startByte + aTag.length;
 
             switch (aTag.id) {
-                case 0: // End
-                case 1: // ShowFrame
-                    myMovie.addTag(aTag);
-                    if (depth == 0) {
-                        currentFrame++;
-                    }
-                    break;
-                case 2: // DefineShape
-                    if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                    {
-                        FShape aShape = parseDefineShape(1);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aShape.getID(), aShape);
-                    }
-                    break;
-                case 4: // PlaceObject
-                {
-                    PlaceObject aPlaceObject = parsePlaceObject(endByte);
-                    aTag.myObject = aPlaceObject;
-                    myMovie.addTag(aTag);
+            case 0: // End
+            case 1: // ShowFrame
+                myMovie.addTag(aTag);
+                if (depth == 0) {
+                    currentFrame++;
                 }
                 break;
-                case 5: // RemoveObject
+            case 2: // DefineShape
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
                 {
-                    aTag.myObject = parseRemoveObject(1);
-                    myMovie.addTag(aTag);
+                    FShape aShape = parseDefineShape(1);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aShape.getID(), aShape);
+                }
+                break;
+            case 4: // PlaceObject
+            {
+                PlaceObject aPlaceObject = parsePlaceObject(endByte);
+                aTag.myObject = aPlaceObject;
+                myMovie.addTag(aTag);
+            }
+            break;
+            case 5: // RemoveObject
+            {
+                aTag.myObject = parseRemoveObject(1);
+                myMovie.addTag(aTag);
+            }
+            break;
+
+            case 6:  // Define Bits 1
+                if (myFilter.getFilter(FlashFilter.BITMAP)) {
+                    FBitmap aBitmap = myImageReader.parseBitmap(1, aTag.length);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aBitmap.getID(), aBitmap);
                 }
                 break;
 
-                case 6:  // Define Bits 1
-                    if (myFilter.getFilter(FlashFilter.BITMAP)) {
-                        FBitmap aBitmap = myImageReader.parseBitmap(1, aTag.length);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aBitmap.getID(), aBitmap);
-                    }
-                    break;
+            case 7: // DefineButton
+                //System.out.println("Tag: DefineButton");
+                break;
+            case 8: // Define JPEGTable
+            {
+                if (myFilter.getFilter(FlashFilter.BITMAP)) {
+                    myImageReader.parseBitmap(0, aTag.length);
+                }
+            }
+            break;
+            case 9: // SetBackgroundColor
+            {
+                aTag.myObject = myTypeReader.rgba(1);
+                coreMovie.setBackgroundColor(((FColor) aTag.myObject).toColor());
+                myMovie.addTag(aTag);
+            }
+            break;
+            case 10: // DefineFont
+                //System.out.println("Tag: DefineFont");
+            {
+                FFont aFont = parseDefineFont();
+                if (aFont != null) {
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aFont.getID(), aFont);
+                }
+            }
+            break;
+            case 11: // DefineText
+            {
+                FText aText = parseText(1);
+                if (aText != null) {
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aText.getID(), aText);
+                }
+            }
+            //System.out.println("Tag: DefineFontInfo");
+            break;
+            case 12: // DoAction
+                //System.out.println("Tag: DoAction");
+                break;
+            case 13: // DefineFontInfo
+                //System.out.println("Tag: DefineText");
+                break;
+            case 14: // Define Sound
+                if (myFilter.getFilter(FlashFilter.SOUND)) {
+                    FSound aSound = DefineSound(aTag.length);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aSound.getID(), aSound);
+                }
+                break;
+            case 17: // DefineButtonSound
+                //System.out.println("Tag: DefineButtonSound");
+                break;
 
-                case 7: // DefineButton
-                    //System.out.println("Tag: DefineButton");
-                    break;
-                case 8: // Define JPEGTable
+            case 18:
+            case 45:
+
+                // System.out.println("Head");
+                //
+                // if (soundBlockHead != null)
+                // {
+                // 	// Build up current stuff and start new
+                // combineTagHeadAndBlockData(soundBlockHead, soundStreamBlocks);
+                //    soundStreamBlocks.clear();
+                // }
+                // soundBlockHead = DefineSoundHead();
+                // soundStreamBlocks = new Vector();
+                //
+                // coreMovie = (FMovie)myMovie;
+                // coreMovie.addSound(soundBlockHead.getID(), soundBlockHead);
+                //
+                break;
+            case 19:
+                // System.out.print("Block:" + aTag.length);
+                //
+                // if (soundStreamBlocks != null)
+                // {
+                // soundStreamBlocks.add(getSoundStreamBlock(aTag.length));
+                // }
+
+                break;
+            case 20:
+                if (myFilter.getFilter(FlashFilter.BITMAP)) {
+                    FLossless aLossless = myImageReader.parseLossless(1, (int) aTag.length);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aLossless.getID(), aLossless);
+                }
+                break;
+            case 21: // Define Bits 2
+                if (myFilter.getFilter(FlashFilter.BITMAP)) {
+                    FBitmap aBitmap = myImageReader.parseBitmap(2, aTag.length);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aBitmap.getID(), aBitmap);
+                }
+                break;
+            case 22: // DefineShape2
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
                 {
-                    if (myFilter.getFilter(FlashFilter.BITMAP)) {
-                        myImageReader.parseBitmap(0, aTag.length);
+                    FShape aShape = parseDefineShape(2);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aShape.getID(), aShape);
+                }
+                break;
+            case 23: // DefineButtonCxForm
+                break;
+            case 24: // Protect
+                //case 25: // Might Protect
+                break;
+            case 26: // Place Object 2
+            case 70: // Place Object 3
+            {
+                PlaceObject aPlaceObject = parsePlaceObject2(aTag.id == 26 ? 2 : 3);
+                aTag.myObject = aPlaceObject;
+                myMovie.addTag(aTag);
+            }
+            break;
+            case 28: // RemoveObject2
+            {
+                aTag.myObject = parseRemoveObject(2);
+                myMovie.addTag(aTag);
+            }
+            break;
+            case 32: // DefineShape3
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
+                {
+                    FShape aShape = parseDefineShape(3);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aShape.getID(), aShape);
+                }
+                break;
+            case 33: // DefineText2
+                FText aText = parseText(2);
+                if (aText != null) {
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aText.getID(), aText);
+                }
+                break;
+            case 34: // DefineButton2
+
+                break;
+            case 35: // Define Bits 3
+                if (myFilter.getFilter(FlashFilter.BITMAP)) {
+                    FBitmap aBitmap = myImageReader.parseBitmap(3, aTag.length);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aBitmap.getID(), aBitmap);
+                }
+                break;
+            case 36:
+                if (myFilter.getFilter(FlashFilter.BITMAP)) {
+                    FLossless aLossless = myImageReader.parseLossless(2, (int) aTag.length);
+                    if (aLossless != null) {
+                        coreMovie = (FMovie) myMovie;
+                        coreMovie.add(aLossless.getID(), aLossless);
                     }
                 }
                 break;
-                case 9: // SetBackgroundColor
-                {
-                    aTag.myObject = myTypeReader.rgba(1);
-                    coreMovie.setBackgroundColor(((FColor) aTag.myObject).toColor());
-                    myMovie.addTag(aTag);
+            case 37: // DefineEditText
+
+                break;
+            case 38:// DefineMovie
+                break;
+            case 39: // DefineSprite
+                if (myFilter.getFilter(FlashFilter.SHAPE)) {
+                    FSprite aSprite = parseDefineSprite(depth, longTotalFileLength, myMovie.getCore());
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aSprite.getID(), aSprite);
                 }
                 break;
-                case 10: // DefineFont
-                    //System.out.println("Tag: DefineFont");
-                {
-                    FFont aFont = parseDefineFont();
+            case 43: // FrameLabel
+
+                break;
+            case 46: // DefineMorphShape
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) {
+                    FMorph aMorph = parseMorphShape();
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aMorph.getID(), aMorph);
+                }
+                break;
+            case 48: // DefineFont2
+                if (myFilter.getFilter(FlashFilter.FONT)) {
+                    FFont aFont = parseDefineFont2(2);
                     if (aFont != null) {
                         coreMovie = (FMovie) myMovie;
                         coreMovie.add(aFont.getID(), aFont);
                     }
                 }
                 break;
-                case 11: // DefineText
-                {
-                    FText aText = parseText(1);
-                    if (aText != null) {
+            case 56: // ExportAssets
+
+                break;
+            case 57: // ImportAssets
+
+                break;
+            case 58: // EnableDebugger
+
+                break;
+            case 75: // DefineFont3
+                if (myFilter.getFilter(FlashFilter.FONT)) {
+                    FFont aFont = parseDefineFont2(3);
+                    if (aFont != null) {
                         coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aText.getID(), aText);
+                        coreMovie.add(aFont.getID(), aFont);
                     }
                 }
-                //System.out.println("Tag: DefineFontInfo");
                 break;
-                case 12: // DoAction
-                    //System.out.println("Tag: DoAction");
-                    break;
-                case 13: // DefineFontInfo
-                    //System.out.println("Tag: DefineText");
-                    break;
-                case 14: // Define Sound
-                    if (myFilter.getFilter(FlashFilter.SOUND)) {
-                        FSound aSound = DefineSound(aTag.length);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aSound.getID(), aSound);
-                    }
-                    break;
-                case 17: // DefineButtonSound
-                    //System.out.println("Tag: DefineButtonSound");
-                    break;
-
-                case 18:
-                case 45:
-
-                    // System.out.println("Head");
-                    //
-                    // if (soundBlockHead != null)
-                    // {
-                    // 	// Build up current stuff and start new
-                    // combineTagHeadAndBlockData(soundBlockHead, soundStreamBlocks);
-                    //    soundStreamBlocks.clear();
-                    // }
-                    // soundBlockHead = DefineSoundHead();
-                    // soundStreamBlocks = new Vector();
-                    //
-                    // coreMovie = (FMovie)myMovie;
-                    // coreMovie.addSound(soundBlockHead.getID(), soundBlockHead);
-                    //
-                    break;
-                case 19:
-                    // System.out.print("Block:" + aTag.length);
-                    //
-                    // if (soundStreamBlocks != null)
-                    // {
-                    // soundStreamBlocks.add(getSoundStreamBlock(aTag.length));
-                    // }
-
-                    break;
-                case 20:
-                    if (myFilter.getFilter(FlashFilter.BITMAP)) {
-                        FLossless aLossless = myImageReader.parseLossless(1, (int) aTag.length);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aLossless.getID(), aLossless);
-                    }
-                    break;
-                case 21: // Define Bits 2
-                    if (myFilter.getFilter(FlashFilter.BITMAP)) {
-                        FBitmap aBitmap = myImageReader.parseBitmap(2, aTag.length);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aBitmap.getID(), aBitmap);
-                    }
-                    break;
-                case 22: // DefineShape2
-                    if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                    {
-                        FShape aShape = parseDefineShape(2);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aShape.getID(), aShape);
-                    }
-                    break;
-                case 23: // DefineButtonCxForm
-                    break;
-                case 24: // Protect
-                    //case 25: // Might Protect
-                    break;
-                case 26: // Place Object 2
-                case 70: // Place Object 3
+            case 83: // DefineShape4
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
                 {
-                    PlaceObject aPlaceObject = parsePlaceObject2(aTag.id == 26 ? 2 : 3);
-                    aTag.myObject = aPlaceObject;
-                    myMovie.addTag(aTag);
+                    FShape aShape = parseDefineShape(4);
+                    coreMovie = (FMovie) myMovie;
+                    coreMovie.add(aShape.getID(), aShape);
                 }
                 break;
-                case 28: // RemoveObject2
-                {
-                    aTag.myObject = parseRemoveObject(2);
-                    myMovie.addTag(aTag);
-                }
+            // case 70: // Place Object 3
+            // {
+            // PlaceObject aPlaceObject = parsePlaceObject2();
+            // aTag.myObject = aPlaceObject2;
+            // FMovie coreMovie = (FMovie)myMovie;
+            // myMovie.addTag(aTag);
+            // }
+            //break;
+            case 1023: // DefineBitsPtr
+                //System.out.println("Tag: DefineBitsPtr");
                 break;
-                case 32: // DefineShape3
-                    if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                    {
-                        FShape aShape = parseDefineShape(3);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aShape.getID(), aShape);
-                    }
-                    break;
-                case 33: // DefineText2
-                    FText aText = parseText(2);
-                    if (aText != null) {
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aText.getID(), aText);
-                    }
-                    break;
-                case 34: // DefineButton2
 
-                    break;
-                case 35: // Define Bits 3
-                    if (myFilter.getFilter(FlashFilter.BITMAP)) {
-                        FBitmap aBitmap = myImageReader.parseBitmap(3, aTag.length);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aBitmap.getID(), aBitmap);
-                    }
-                    break;
-                case 36:
-                    if (myFilter.getFilter(FlashFilter.BITMAP)) {
-                        FLossless aLossless = myImageReader.parseLossless(2, (int) aTag.length);
-                        if (aLossless != null) {
-                            coreMovie = (FMovie) myMovie;
-                            coreMovie.add(aLossless.getID(), aLossless);
-                        }
-                    }
-                    break;
-                case 37: // DefineEditText
-
-                    break;
-                case 38:// DefineMovie
-                    break;
-                case 39: // DefineSprite
-                    if (myFilter.getFilter(FlashFilter.SHAPE)) {
-                        FSprite aSprite = parseDefineSprite(depth, longTotalFileLength, myMovie.getCore());
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aSprite.getID(), aSprite);
-                    }
-                    break;
-                case 43: // FrameLabel
-
-                    break;
-                case 46: // DefineMorphShape
-                    if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) {
-                        FMorph aMorph = parseMorphShape();
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aMorph.getID(), aMorph);
-                    }
-                    break;
-                case 48: // DefineFont2
-                    if (myFilter.getFilter(FlashFilter.FONT)) {
-                        FFont aFont = parseDefineFont2(2);
-                        if (aFont != null) {
-                            coreMovie = (FMovie) myMovie;
-                            coreMovie.add(aFont.getID(), aFont);
-                        }
-                    }
-                    break;
-                case 56: // ExportAssets
-
-                    break;
-                case 57: // ImportAssets
-
-                    break;
-                case 58: // EnableDebugger
-
-                    break;
-                case 75: // DefineFont3
-                    if (myFilter.getFilter(FlashFilter.FONT)) {
-                        FFont aFont = parseDefineFont2(3);
-                        if (aFont != null) {
-                            coreMovie = (FMovie) myMovie;
-                            coreMovie.add(aFont.getID(), aFont);
-                        }
-                    }
-                    break;
-                case 83: // DefineShape4
-                    if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                    {
-                        FShape aShape = parseDefineShape(4);
-                        coreMovie = (FMovie) myMovie;
-                        coreMovie.add(aShape.getID(), aShape);
-                    }
-                    break;
-                // case 70: // Place Object 3
-                // {
-                // PlaceObject aPlaceObject = parsePlaceObject2();
-                // aTag.myObject = aPlaceObject2;
-                // FMovie coreMovie = (FMovie)myMovie;
-                // myMovie.addTag(aTag);
-                // }
-                //break;
-                case 1023: // DefineBitsPtr
-                    //System.out.println("Tag: DefineBitsPtr");
-                    break;
-
-                default:
-                    //System.out.println(aTag);
-                    break;
+            default:
+                //System.out.println(aTag);
+                break;
             }
 
             if (aTag.id == 0) // End
@@ -856,18 +876,18 @@ public class TagReader {
             recordType = (int) bl.ub(1);
 
             switch (recordType) {
-                case 0: {
-                    int glyphCount = (int) bl.ub(7);
-                    if (glyphCount == 0) {
-                        return;
-                    } else {
-                        for (int x = 0; x < glyphCount; x++) {
-                            aTextRecord.add(new FTextGlyph((int) bl.ub(nGlyphBits), (int) bl.sb(nAdvanceBits)));
-                        }
+            case 0: {
+                int glyphCount = (int) bl.ub(7);
+                if (glyphCount == 0) {
+                    return;
+                } else {
+                    for (int x = 0; x < glyphCount; x++) {
+                        aTextRecord.add(new FTextGlyph((int) bl.ub(nGlyphBits), (int) bl.sb(nAdvanceBits)));
                     }
                 }
-                break;
-                case 1: {
+            }
+            break;
+            case 1: {
                   /*
                   TextReserved				UB [3]									Reserved � always 0     
                   TextHasFont					HasFont = UB [1]						1 if text font specified     
@@ -881,43 +901,43 @@ public class TagReader {
                   TextYOffset					If hasYOffset SI16					Font Y offset for following text     
                   TextHeight					If hasFont UI16						Font height for following text
                   */
-                    FTextRecord aRecord = new FTextRecord(aFormat);
-                    int reserved = (int) bl.ub(3);
-                    int hasFont = (int) bl.ub(1);
-                    int hasColor = (int) bl.ub(1);
-                    int hasOffsetY = (int) bl.ub(1);
-                    int hasOffsetX = (int) bl.ub(1);
+                FTextRecord aRecord = new FTextRecord(aFormat);
+                int reserved = (int) bl.ub(3);
+                int hasFont = (int) bl.ub(1);
+                int hasColor = (int) bl.ub(1);
+                int hasOffsetY = (int) bl.ub(1);
+                int hasOffsetX = (int) bl.ub(1);
 
-                    aTextRecord.add(aRecord);
+                aTextRecord.add(aRecord);
 
-                    if (hasFont == 1) {
-                        //TextFontID	if hasFont UI16
-                        int fontID = (int) bl.ui16();
-                        aRecord.setFont((FFont) coreMovie.findObject(fontID));
-                    }
-
-                    if (hasColor == 1) {
-                        FColor aColor = myTypeReader.rgba(aFormat == 1 ? 1 : 3);
-                        aRecord.setColor(aColor);
-                    }
-
-                    if (hasOffsetX == 1) {
-                        int offset = (int) bl.si16();
-                        aRecord.setOffsetX(offset);
-                    }
-
-                    if (hasOffsetY == 1) {
-                        int offset = (int) bl.si16();
-                        aRecord.setOffsetY(offset);
-                    }
-
-                    if (hasFont == 1) {
-                        int height = (int) bl.ui16();
-                        aRecord.setHeight(height);
-                    }
-
+                if (hasFont == 1) {
+                    //TextFontID	if hasFont UI16
+                    int fontID = (int) bl.ui16();
+                    aRecord.setFont((FFont) coreMovie.findObject(fontID));
                 }
-                break;
+
+                if (hasColor == 1) {
+                    FColor aColor = myTypeReader.rgba(aFormat == 1 ? 1 : 3);
+                    aRecord.setColor(aColor);
+                }
+
+                if (hasOffsetX == 1) {
+                    int offset = (int) bl.si16();
+                    aRecord.setOffsetX(offset);
+                }
+
+                if (hasOffsetY == 1) {
+                    int offset = (int) bl.si16();
+                    aRecord.setOffsetY(offset);
+                }
+
+                if (hasFont == 1) {
+                    int height = (int) bl.ui16();
+                    aRecord.setHeight(height);
+                }
+
+            }
+            break;
             }
         }
 

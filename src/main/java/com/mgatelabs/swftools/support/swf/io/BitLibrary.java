@@ -3,19 +3,20 @@
  */
 
 /**
- <p>
- <b>Binary Input Library Class</b>
- </p>
- <p>
- Used to process flash files at the object level.  <b>Example</b> rects, floats, ints.
- </p>
+ * <p>
+ * <b>Binary Input Library Class</b>
+ * </p>
+ * <p>
+ * Used to process flash files at the object level.  <b>Example</b> rects, floats, ints.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
 
+import java.io.IOException;
+
 import com.mgatelabs.swftools.exploit.control.AppControl;
 
-import java.io.IOException;
 
 public class BitLibrary {
     // Class Operations

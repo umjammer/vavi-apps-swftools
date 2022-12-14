@@ -13,6 +13,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.awt.geom.AffineTransform;
 
+
 public class FMatrix {
        /*
              HasScale        	  hasScale = UB[1]        	      	Has scale values if equal to 1

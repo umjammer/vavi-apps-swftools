@@ -3,12 +3,12 @@
  */
 
 /**
- <p>
- <b>Remove Object Tag</b>
- </p>
- <p>
- Used to remove objects from the display graph.
- </p>
+ * <p>
+ * <b>Remove Object Tag</b>
+ * </p>
+ * <p>
+ * Used to remove objects from the display graph.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.tags;

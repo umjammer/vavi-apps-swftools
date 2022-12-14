@@ -1,7 +1,8 @@
 package com.mgatelabs.swftools.support.tools;
 
-import javax.swing.*;
 import java.awt.event.ActionListener;
+import javax.swing.JMenuItem;
+
 
 public class JMenuItemCreator {
     ActionListener myActionListener;

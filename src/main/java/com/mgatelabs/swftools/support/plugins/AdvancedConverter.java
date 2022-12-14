@@ -1,15 +1,32 @@
 package com.mgatelabs.swftools.support.plugins;
 
-import com.mgatelabs.swftools.exploit.conversion.*;
-import com.mgatelabs.swftools.exploit.render.AdvancedPath;
-import com.mgatelabs.swftools.support.swf.objects.*;
-
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Stack;
 import java.util.Vector;
+
+import com.mgatelabs.swftools.exploit.conversion.AdvPathLink;
+import com.mgatelabs.swftools.exploit.conversion.AdvPathLinkList;
+import com.mgatelabs.swftools.exploit.conversion.Converter;
+import com.mgatelabs.swftools.exploit.conversion.RBase;
+import com.mgatelabs.swftools.exploit.conversion.RCurve;
+import com.mgatelabs.swftools.exploit.conversion.REdge;
+import com.mgatelabs.swftools.exploit.conversion.RGraph;
+import com.mgatelabs.swftools.exploit.conversion.RNode;
+import com.mgatelabs.swftools.exploit.conversion.RTools;
+import com.mgatelabs.swftools.exploit.conversion.ReversePathIterator;
+import com.mgatelabs.swftools.exploit.render.AdvancedPath;
+import com.mgatelabs.swftools.support.swf.objects.FEdge;
+import com.mgatelabs.swftools.support.swf.objects.FFill;
+import com.mgatelabs.swftools.support.swf.objects.FFont;
+import com.mgatelabs.swftools.support.swf.objects.FLine;
+import com.mgatelabs.swftools.support.swf.objects.FMovie;
+import com.mgatelabs.swftools.support.swf.objects.FShape;
+import com.mgatelabs.swftools.support.swf.objects.FStyle;
+import com.mgatelabs.swftools.support.swf.objects.FStyleChange;
+
 
 public class AdvancedConverter implements Converter, Plugin {
 
@@ -565,18 +582,18 @@ public class AdvancedConverter implements Converter, Plugin {
                     while (!pi.isDone()) {
                         //System.out.println("Conversion Path");
                         switch (pi.currentSegment(floatArray)) {
-                            case PathIterator.SEG_CLOSE:
-                                aPath.closePath();
-                                break;
-                            case PathIterator.SEG_QUADTO:
-                                aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
-                                break;
-                            case PathIterator.SEG_LINETO:
-                                aPath.lineTo(floatArray[0], floatArray[1]);
-                                break;
-                            case PathIterator.SEG_MOVETO:
-                                aPath.moveTo(floatArray[0], floatArray[1]);
-                                break;
+                        case PathIterator.SEG_CLOSE:
+                            aPath.closePath();
+                            break;
+                        case PathIterator.SEG_QUADTO:
+                            aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
+                            break;
+                        case PathIterator.SEG_LINETO:
+                            aPath.lineTo(floatArray[0], floatArray[1]);
+                            break;
+                        case PathIterator.SEG_MOVETO:
+                            aPath.moveTo(floatArray[0], floatArray[1]);
+                            break;
                         } // End Case
                         pi.next();
                     } // End While
@@ -627,27 +644,27 @@ public class AdvancedConverter implements Converter, Plugin {
             while (!pi.isDone() && count < 60) {
                 //System.out.println("Conversion Path");
                 switch (pi.currentSegment(floatArray)) {
-                    case PathIterator.SEG_CLOSE:
-                        //aPath.closePath();
-                        break;
-                    case PathIterator.SEG_QUADTO:
-                        //aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
-                        points[count][0] = floatArray[2];
-                        points[count][1] = floatArray[3];
-                        count++;
-                        break;
-                    case PathIterator.SEG_LINETO:
-                        //aPath.lineTo(floatArray[0], floatArray[1]);
-                        points[count][0] = floatArray[0];
-                        points[count][1] = floatArray[1];
-                        count++;
-                        break;
-                    case PathIterator.SEG_MOVETO:
-                        //aPath.moveTo(floatArray[0], floatArray[1]);
-                        points[count][0] = floatArray[0];
-                        points[count][1] = floatArray[1];
-                        count++;
-                        break;
+                case PathIterator.SEG_CLOSE:
+                    //aPath.closePath();
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    //aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
+                    points[count][0] = floatArray[2];
+                    points[count][1] = floatArray[3];
+                    count++;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    //aPath.lineTo(floatArray[0], floatArray[1]);
+                    points[count][0] = floatArray[0];
+                    points[count][1] = floatArray[1];
+                    count++;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    //aPath.moveTo(floatArray[0], floatArray[1]);
+                    points[count][0] = floatArray[0];
+                    points[count][1] = floatArray[1];
+                    count++;
+                    break;
                 } // End Case
                 pi.next();
             } // End While
@@ -715,18 +732,18 @@ public class AdvancedConverter implements Converter, Plugin {
                     while (!pi.isDone()) {
                         //System.out.println("Conversion Path");
                         switch (pi.currentSegment(floatArray)) {
-                            case PathIterator.SEG_CLOSE:
-                                aPath.closePath();
-                                break;
-                            case PathIterator.SEG_QUADTO:
-                                aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
-                                break;
-                            case PathIterator.SEG_LINETO:
-                                aPath.lineTo(floatArray[0], floatArray[1]);
-                                break;
-                            case PathIterator.SEG_MOVETO:
-                                aPath.moveTo(floatArray[0], floatArray[1]);
-                                break;
+                        case PathIterator.SEG_CLOSE:
+                            aPath.closePath();
+                            break;
+                        case PathIterator.SEG_QUADTO:
+                            aPath.quadTo(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
+                            break;
+                        case PathIterator.SEG_LINETO:
+                            aPath.lineTo(floatArray[0], floatArray[1]);
+                            break;
+                        case PathIterator.SEG_MOVETO:
+                            aPath.moveTo(floatArray[0], floatArray[1]);
+                            break;
                         } // End Case
                         pi.next();
                     } // End While
@@ -757,18 +774,18 @@ public class AdvancedConverter implements Converter, Plugin {
 
         while (!pi.isDone()) {
             switch (pi.currentSegment(p)) {
-                case PathIterator.SEG_CLOSE:
-                    gp.closePath();
-                    break;
-                case PathIterator.SEG_LINETO:
-                    gp.lineTo(p[0], p[1]);
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    gp.moveTo(p[0], p[1]);
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    gp.quadTo(p[0], p[1], p[2], p[3]);
-                    break;
+            case PathIterator.SEG_CLOSE:
+                gp.closePath();
+                break;
+            case PathIterator.SEG_LINETO:
+                gp.lineTo(p[0], p[1]);
+                break;
+            case PathIterator.SEG_MOVETO:
+                gp.moveTo(p[0], p[1]);
+                break;
+            case PathIterator.SEG_QUADTO:
+                gp.quadTo(p[0], p[1], p[2], p[3]);
+                break;
             }
             pi.next();
         }

@@ -2,6 +2,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.awt.image.BufferedImage;
 
+
 public class FLossless implements FID, FImage {
     int myID;
     int myWidth;

@@ -3,22 +3,37 @@
  */
 
 /**
- <p>
- <b>Flash Type Reader</b>
- </p>
- <p>
- Used to read flash files at the type level.  <b>Example</b> Strings, Rects, Gradients...
- </p>
+ * <p>
+ * <b>Flash Type Reader</b>
+ * </p>
+ * <p>
+ * Used to read flash files at the type level.  <b>Example</b> Strings, Rects, Gradients...
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
 
-import com.mgatelabs.swftools.exploit.control.AppControl;
-import com.mgatelabs.swftools.support.swf.objects.*;
-import com.mgatelabs.swftools.support.swf.tags.Tag;
-
 import java.io.IOException;
 import java.util.Vector;
+
+import com.mgatelabs.swftools.exploit.control.AppControl;
+import com.mgatelabs.swftools.support.swf.objects.CXFORMALPHA;
+import com.mgatelabs.swftools.support.swf.objects.FColor;
+import com.mgatelabs.swftools.support.swf.objects.FFill;
+import com.mgatelabs.swftools.support.swf.objects.FGradient;
+import com.mgatelabs.swftools.support.swf.objects.FGradientRecord;
+import com.mgatelabs.swftools.support.swf.objects.FLine;
+import com.mgatelabs.swftools.support.swf.objects.FMatrix;
+import com.mgatelabs.swftools.support.swf.objects.FMorphGradient;
+import com.mgatelabs.swftools.support.swf.objects.FMorphGradientRecord;
+import com.mgatelabs.swftools.support.swf.objects.FMorphLine;
+import com.mgatelabs.swftools.support.swf.objects.FMorphSolid;
+import com.mgatelabs.swftools.support.swf.objects.FMorphTexture;
+import com.mgatelabs.swftools.support.swf.objects.FRect;
+import com.mgatelabs.swftools.support.swf.objects.FSolid;
+import com.mgatelabs.swftools.support.swf.objects.FTexture;
+import com.mgatelabs.swftools.support.swf.tags.Tag;
+
 
 public class TypeReader {
     private BitLibrary bl;
@@ -226,24 +241,24 @@ public class TypeReader {
         //	System.out.println(type);
 
         switch (type) {
-            case 0x00: // solid fill
-                return new FSolid(rgba(format));
-            case 0x10: // linear gradient fill
-                return new FGradient(format, FFill.LGRADIENT, matrix(), gradient(type, sFormat, format));
-            case 0x12: // radial gradient fill
-                return new FGradient(format, FFill.RGRADIENT, matrix(), gradient(type, sFormat, format));
-            case 0x13: // focal gradient fill
-                return new FGradient(format, FFill.FGRADIENT, matrix(), gradient(type, sFormat, format));
-            case 0x40: // tiled bitmap fill
-                return new FTexture(FFill.TBITMAP, (int) bl.ui16(), matrix());
-            case 0x41: // clipped bitmap fill
-            case 0x42: // clipped bitmap fill
-            case 0x43: // clipped bitmap fill
-            case 0x44: // clipped bitmap fill
-                return new FTexture(FFill.CBITMAP, (int) bl.ui16(), matrix());
-            default:
+        case 0x00: // solid fill
+            return new FSolid(rgba(format));
+        case 0x10: // linear gradient fill
+            return new FGradient(format, FFill.LGRADIENT, matrix(), gradient(type, sFormat, format));
+        case 0x12: // radial gradient fill
+            return new FGradient(format, FFill.RGRADIENT, matrix(), gradient(type, sFormat, format));
+        case 0x13: // focal gradient fill
+            return new FGradient(format, FFill.FGRADIENT, matrix(), gradient(type, sFormat, format));
+        case 0x40: // tiled bitmap fill
+            return new FTexture(FFill.TBITMAP, (int) bl.ui16(), matrix());
+        case 0x41: // clipped bitmap fill
+        case 0x42: // clipped bitmap fill
+        case 0x43: // clipped bitmap fill
+        case 0x44: // clipped bitmap fill
+            return new FTexture(FFill.CBITMAP, (int) bl.ui16(), matrix());
+        default:
 
-                System.out.println(type);
+            System.out.println(type);
         }
         return null;
     }
@@ -366,16 +381,16 @@ public class TypeReader {
 
         int type = (int) bl.ui8();
         switch (type) {
-            case 0x00: // solid fill
-                return new FMorphSolid(rgba(3), rgba(3));
-            case 0x10: // linear gradient fill
-                return new FMorphGradient(FFill.LGRADIENT, matrix(), matrix(), morphGradient());
-            case 0x12: // radial gradient fill
-                return new FMorphGradient(FFill.RGRADIENT, matrix(), matrix(), morphGradient());
-            //case 0x40: // tiled bitmap fill
-            //return new FTexture( FFill.TBITMAP, (int)bl.ui16(), matrix() ) ;
-            case 0x41: // clipped bitmap fill
-                return new FMorphTexture((int) bl.ui16(), matrix(), matrix());
+        case 0x00: // solid fill
+            return new FMorphSolid(rgba(3), rgba(3));
+        case 0x10: // linear gradient fill
+            return new FMorphGradient(FFill.LGRADIENT, matrix(), matrix(), morphGradient());
+        case 0x12: // radial gradient fill
+            return new FMorphGradient(FFill.RGRADIENT, matrix(), matrix(), morphGradient());
+        //case 0x40: // tiled bitmap fill
+        //return new FTexture( FFill.TBITMAP, (int)bl.ui16(), matrix() ) ;
+        case 0x41: // clipped bitmap fill
+            return new FMorphTexture((int) bl.ui16(), matrix(), matrix());
         }
         return null;
     }

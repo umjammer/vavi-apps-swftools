@@ -3,12 +3,12 @@
  */
 
 /**
- <p>
- <b>Place Object Tag</b>
- </p>
- <p>
- Used to place objects on the display graph.
- </p>
+ * <p>
+ * <b>Place Object Tag</b>
+ * </p>
+ * <p>
+ * Used to place objects on the display graph.
+ * </p>
  */
 
 
@@ -16,6 +16,7 @@ package com.mgatelabs.swftools.support.swf.tags;
 
 import com.mgatelabs.swftools.support.swf.objects.CXFORMALPHA;
 import com.mgatelabs.swftools.support.swf.objects.FMatrix;
+
 
 public class PlaceObject {
        /*

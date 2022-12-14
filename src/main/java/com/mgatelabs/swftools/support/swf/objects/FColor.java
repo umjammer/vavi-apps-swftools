@@ -10,7 +10,7 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.awt.*;
+import java.awt.Color;
 
 // Flash Color Class, aka RGB || RGBA
 

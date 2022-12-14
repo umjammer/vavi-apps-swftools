@@ -1,9 +1,13 @@
 package com.mgatelabs.swftools.support.xml;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
+
 
 public class XMLNode {
     public XMLNode next, sub;

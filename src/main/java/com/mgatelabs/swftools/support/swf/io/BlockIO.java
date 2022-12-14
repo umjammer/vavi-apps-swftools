@@ -3,24 +3,25 @@
  */
 
 /**
- <p>
- <b>Block Input/Output Class</b>
- </p>
- <p>
- Used to read and write flash files at the TAG level.  Useful for editing flash content.
- </p>
+ * <p>
+ * <b>Block Input/Output Class</b>
+ * </p>
+ * <p>
+ * Used to read and write flash files at the TAG level.  Useful for editing flash content.
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Vector;
 
 import com.mgatelabs.swftools.support.swf.objects.FMovie;
 import com.mgatelabs.swftools.support.swf.objects.FRect;
 import com.mgatelabs.swftools.support.swf.tags.TBlock;
 import com.mgatelabs.swftools.support.swf.tags.Tag;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.util.Vector;
 
 public class BlockIO {
 

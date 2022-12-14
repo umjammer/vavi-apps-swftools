@@ -3,21 +3,22 @@
  */
 
 /**
- <p>
- <b>Flash Type Reader</b>
- </p>
- <p>
- Used to write flash files at the type level.  <b>Example</b> Strings, Rects, Gradients...
- </p>
+ * <p>
+ * <b>Flash Type Reader</b>
+ * </p>
+ * <p>
+ * Used to write flash files at the type level.  <b>Example</b> Strings, Rects, Gradients...
+ * </p>
  */
 
 package com.mgatelabs.swftools.support.swf.io;
+
+import java.io.IOException;
 
 import com.mgatelabs.swftools.support.swf.objects.FMatrix;
 import com.mgatelabs.swftools.support.swf.objects.FRect;
 import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
 
-import java.io.IOException;
 
 public class TypeWriter {
     private BitOutput bo;

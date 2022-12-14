@@ -5,7 +5,8 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+
 
 public class FLine {
     // Line Information for a Shape
@@ -72,27 +73,27 @@ public class FLine {
         int joinStyle = 0;
 
         switch (f_start_cap_style) {
-            case 0: // Round cap
-                capStyle = BasicStroke.CAP_ROUND;
-                break;
-            case 1: // No cap
-                capStyle = BasicStroke.CAP_BUTT;
-                break;
-            case 2: // Square cap
-                capStyle = BasicStroke.CAP_SQUARE;
-                break;
+        case 0: // Round cap
+            capStyle = BasicStroke.CAP_ROUND;
+            break;
+        case 1: // No cap
+            capStyle = BasicStroke.CAP_BUTT;
+            break;
+        case 2: // Square cap
+            capStyle = BasicStroke.CAP_SQUARE;
+            break;
         }
 
         switch (f_join_style) {
-            case 0: // Round cap
-                joinStyle = BasicStroke.JOIN_ROUND;
-                break;
-            case 1: // Bevel cap
-                joinStyle = BasicStroke.JOIN_BEVEL;
-                break;
-            case 2: // Miter cap
-                joinStyle = BasicStroke.JOIN_MITER;
-                break;
+        case 0: // Round cap
+            joinStyle = BasicStroke.JOIN_ROUND;
+            break;
+        case 1: // Bevel cap
+            joinStyle = BasicStroke.JOIN_BEVEL;
+            break;
+        case 2: // Miter cap
+            joinStyle = BasicStroke.JOIN_MITER;
+            break;
         }
 
       	

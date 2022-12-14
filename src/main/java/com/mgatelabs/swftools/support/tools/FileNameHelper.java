@@ -2,6 +2,7 @@ package com.mgatelabs.swftools.support.tools;
 
 import java.io.File;
 
+
 public class FileNameHelper {
 
     public static File checkFile(File target, String extension) {
