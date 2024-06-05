@@ -8,12 +8,13 @@ package com.mgatelabs.swftools.support.swf.objects;
 // Import in the frame parser
 
 import java.awt.Color;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mgatelabs.swftools.support.swf.tools.FrameParser;
 
 // Need color information
-// Need vector information
+// Need List<?> information
 
 //import flash.tools.*;
 
@@ -24,7 +25,7 @@ public class FMovieData {
     private int myFrame;
     private int myInstruction;
     private FMovieInterface myMovie;
-    private Vector myDisplayList;
+    private List<FDisplayListItem> myDisplayList;
     private Color backgroundColor;
 
     // Constructor
@@ -33,7 +34,7 @@ public class FMovieData {
         myMovie = aMovie;
         myFrame = 0;
         myInstruction = 0;
-        myDisplayList = new Vector(10);
+        myDisplayList = new ArrayList<>(10);
         backgroundColor = null;
     }
 
@@ -57,7 +58,7 @@ public class FMovieData {
 
     // Get the display list
 
-    public Vector getDisplayList() {
+    public List<FDisplayListItem> getDisplayList() {
         return myDisplayList;
     }
 
@@ -93,10 +94,10 @@ public class FMovieData {
 
         for (int x = 0; x < myDisplayList.size(); x++) {
             //System.out.println("Checking " + x);
-            FDisplayListItem dli = (FDisplayListItem) myDisplayList.get(x);
+            FDisplayListItem dli = myDisplayList.get(x);
             if (dli != null && dli.getInsertFrame() != 0) {
                 //System.out.println(dli.getInsertFrame());
-                myDisplayList.setElementAt(null, x);
+                myDisplayList.set(x, null);
             }
         }
 

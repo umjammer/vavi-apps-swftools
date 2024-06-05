@@ -18,7 +18,9 @@
 package com.mgatelabs.swftools.support.swf.io;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 import com.mgatelabs.swftools.exploit.control.AppControl;
 import com.mgatelabs.swftools.support.swf.objects.FBitmap;
@@ -44,6 +46,7 @@ import com.mgatelabs.swftools.support.swf.objects.FTexture;
 import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
 import com.mgatelabs.swftools.support.swf.tags.RemoveObject;
 import com.mgatelabs.swftools.support.swf.tags.Tag;
+import vavi.util.Debug;
 
 
 public class TagReader {
@@ -129,7 +132,7 @@ public class TagReader {
         }
 
         //FSound soundBlockHead = null;
-        //Vector soundStreamBlocks = null;
+        //List<?> soundStreamBlocks = null;
 
         while (bi.bitsRead < longTotalFileLength && currentFrame != myMaxFrame) {
             myPercentage = (int) (((float) bi.bitsRead / longTotalFileLength) * 100);
@@ -247,7 +250,7 @@ public class TagReader {
                 //    soundStreamBlocks.clear();
                 // }
                 // soundBlockHead = DefineSoundHead();
-                // soundStreamBlocks = new Vector();
+                // soundStreamBlocks = new ArrayList<>();
                 //
                 // coreMovie = (FMovie)myMovie;
                 // coreMovie.addSound(soundBlockHead.getID(), soundBlockHead);
@@ -277,8 +280,7 @@ public class TagReader {
                 }
                 break;
             case 22: // DefineShape2
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                {
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
                     FShape aShape = parseDefineShape(2);
                     coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
@@ -304,8 +306,7 @@ public class TagReader {
             }
             break;
             case 32: // DefineShape3
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                {
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
                     FShape aShape = parseDefineShape(3);
                     coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
@@ -387,8 +388,7 @@ public class TagReader {
                 }
                 break;
             case 83: // DefineShape4
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
-                {
+                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
                     FShape aShape = parseDefineShape(4);
                     coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
@@ -403,11 +403,11 @@ public class TagReader {
             // }
             //break;
             case 1023: // DefineBitsPtr
-                //System.out.println("Tag: DefineBitsPtr");
+                Debug.println(Level.FINER, "Tag: DefineBitsPtr");
                 break;
 
             default:
-                //System.out.println(aTag);
+                Debug.println(aTag);
                 break;
             }
 
@@ -422,17 +422,16 @@ public class TagReader {
 
             if (bi.bitsRead < endByte) {
                 long skipTotal = (endByte - bi.bitsRead);
-                //System.out.println("Skipping: From " + bi.bitsRead + " To " + endByte + " Total " + skipTotal);
+                Debug.println(Level.FINE, "Skipping: From " + bi.bitsRead + " To " + endByte + " Total " + skipTotal);
                 bi.skip(skipTotal);
             } else if (bi.bitsRead > endByte) {
                 //for (int x=0;x<depth+1;x++)
                 //{
                 //System.out.print("\t");
                 //}
-                System.out.println("Error:Overbyte:" + (bi.bitsRead - endByte) + " " + bi.bitsRead + "\\" + endByte);
+                Debug.println(Level.WARNING, "Error:Overbyte:" + (bi.bitsRead - endByte) + " " + bi.bitsRead + "\\" + endByte);
                 return "Error: OVERBYTE when reading " + aTag + " " + (bi.bitsRead - endByte) + " " + bi.bitsRead + "\\" + endByte;
             }
-
         }
 
         return null;
@@ -440,7 +439,7 @@ public class TagReader {
 
     // Tag Helpers
        /*
-       private void combineTagHeadAndBlockData(FSound target, Vector data)
+       private void combineTagHeadAndBlockData(FSound target, List<?> data)
       {
          int size = 0;
          int [] output = null;
@@ -752,7 +751,7 @@ public class TagReader {
             myFShape.setShapeNonScales(sns);
             myFShape.setShapeScales(ss);
         }
-      	
+
       	/*
       		Read Shape With Style
       		FillStyles        	  FillStyleArray         	   Array of fill styles      
@@ -772,7 +771,7 @@ public class TagReader {
     }
 
     // parse Fill Style Arrays
-    private void parseFillStyleArray(Vector myStyles, int sFormat, int format) throws IOException {
+    private void parseFillStyleArray(List<Object> myStyles, int sFormat, int format) throws IOException {
       	/*
       		FillStyleCount        	      			count = UI8         	      		Count of fill styles      
       		FillStyleCountExtended      	     		If count = 0xFF count = UI16     Extended count of fill Styles.
@@ -816,7 +815,7 @@ public class TagReader {
     }
 
     // parse Line Style Arrays
-    private void parseLineStyleArray(Vector myStyles, int sFormat, int format) throws IOException {
+    private void parseLineStyleArray(List<Object> myStyles, int sFormat, int format) throws IOException {
       	/*
       		LineStyleCount        	count = UI8         	         Count of line styles      
       		LineStyleCountExtended  If count = 0xFF count = UI16  Extended count of line Styles.     
@@ -843,7 +842,7 @@ public class TagReader {
 
     // 1.18 Code
 
-    private void parseTextRecord(int aFormat, int nGlyphBits, int nAdvanceBits, Vector aTextRecord) throws IOException {
+    private void parseTextRecord(int aFormat, int nGlyphBits, int nAdvanceBits, List<Object> aTextRecord) throws IOException {
       /*
       Field							Type										Comment
       
@@ -943,7 +942,7 @@ public class TagReader {
 
     }
 
-    private void parseShapeRecord(Vector myShapeRecord, int format) throws IOException {
+    private void parseShapeRecord(List<Object> myShapeRecord, int format) throws IOException {
         // First Things First
         int NumFillBits = (int) bl.ub(4);
         int NumLineBits = (int) bl.ub(4);
@@ -1294,7 +1293,7 @@ public class TagReader {
     }
 
     // parse Fill Style Arrays
-    private void parseMorphFillStyleArray(Vector myStyles) throws IOException {
+    private void parseMorphFillStyleArray(List<Object> myStyles) throws IOException {
       	/*
       		FillStyleCount        	      			count = UI8         	      		Count of fill styles      
       		FillStyleCountExtended      	     		If count = 0xFF count = UI16     Extended count of fill Styles.
@@ -1321,7 +1320,7 @@ public class TagReader {
     }
 
     // parse Line Style Arrays
-    private void parseMorphLineStyleArray(Vector myStyles) throws IOException {
+    private void parseMorphLineStyleArray(List<Object> myStyles) throws IOException {
       	/*
       		LineStyleCount        	count = UI8         	         Count of line styles      
       		LineStyleCountExtended  If count = 0xFF count = UI16  Extended count of line Styles.     
@@ -1345,7 +1344,7 @@ public class TagReader {
         }
     }
 
-    private void parseMorphRecord(Vector myShapeRecord, long length) throws IOException {
+    private void parseMorphRecord(List<Object> myShapeRecord, long length) throws IOException {
         //long endLength = bi.bitsRead + length;
 
         //System.out.println("End " + length);
@@ -1513,7 +1512,7 @@ public class TagReader {
 
         //bi.skip( offsetToStartOfGlyphs - 2 );
 
-        Vector[] glyphVector = new Vector[glyphCount];
+        List<Object>[] glyphList = new List[glyphCount];
 
         for (int x = 0; x < glyphCount; x++) {
             bi.align();
@@ -1526,12 +1525,12 @@ public class TagReader {
                 throw ieo;
             }
 
-            Vector glyph = new Vector();
+            List<Object> glyph = new ArrayList<>();
             parseShapeRecord(glyph, 3);
-            glyphVector[x] = glyph;
+            glyphList[x] = glyph;
         }
 
-        aFont.setGlyphs(glyphVector);
+        aFont.setGlyphs(glyphList);
 
         return aFont;
     }
@@ -1598,7 +1597,7 @@ public class TagReader {
         aFont.setGlyphOffsetTable(glyphOffsetTable);
 
         //FontShapeTable 	SHAPE[nGlyphs]
-        Vector[] glyphVector = new Vector[glyphCount];
+        List<Object>[] glyphList = new List[glyphCount];
 
         for (int x = 0; x < glyphCount; x++) {
             bi.align();
@@ -1611,12 +1610,12 @@ public class TagReader {
                 throw ieo;
             }
 
-            Vector glyph = new Vector();
+            List<Object> glyph = new ArrayList<>();
             parseShapeRecord(glyph, 3);
-            glyphVector[x] = glyph;
+            glyphList[x] = glyph;
         }
 
-        aFont.setGlyphs(glyphVector);
+        aFont.setGlyphs(glyphList);
 
         //FontCodeTable 	If FontFlagsWideCodes is 1, UI16[nGlyphs] else UI8[nGlyphs]
       
@@ -1711,7 +1710,7 @@ public class TagReader {
 
         int nAdvanceBits = (int) bl.ui8();
 
-        Vector myRecords = new Vector();
+        List<Object> myRecords = new ArrayList<>();
 
         parseTextRecord(version, nGlyphBits, nAdvanceBits, myRecords);
 

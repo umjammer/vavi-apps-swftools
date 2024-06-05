@@ -1,6 +1,6 @@
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.util.Vector;
+import java.util.List;
 
 
 public class FText implements FID {
@@ -8,7 +8,7 @@ public class FText implements FID {
     private int myVersion;
     private FRect myRect;
     private FMatrix myMatrix;
-    private Vector myRecords;
+    private List<?> myRecords;
 
    	/*
        Header        	  	 	   RECORDHEADER        	      Tag ID = 11
@@ -57,11 +57,11 @@ public class FText implements FID {
 
     // Records
 
-    public void setRecords(Vector aRecordSet) {
+    public void setRecords(List<?> aRecordSet) {
         myRecords = aRecordSet;
     }
 
-    public Vector getRecords() {
+    public List<?> getRecords() {
         return myRecords;
     }
 }

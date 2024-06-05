@@ -3,8 +3,8 @@ package com.mgatelabs.swftools.support.xml;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -20,9 +20,9 @@ public class XMLHash {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public Hashtable read(InputStream is) {
+    public Map<String, String>read(InputStream is) {
         try {
-            Hashtable hash = new Hashtable();
+            Map<String, String>hash = new HashMap<>();
 
             XML_Reader xml = new XML_Reader();
             Document doc = xml.getXML(is);
@@ -41,8 +41,8 @@ public class XMLHash {
         }
     }
 
-    public Hashtable read(File target) {
-        Hashtable hash = new Hashtable();
+    public Map<String, String> read(File target) {
+        Map<String, String>hash = new HashMap<>();
 
         XML_Reader xml = new XML_Reader();
         Document doc = xml.getXML(target);
@@ -56,7 +56,7 @@ public class XMLHash {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private void parseXML(Hashtable hash, Node node) {
+    private void parseXML(Map<String, String>hash, Node node) {
         if (node.getNodeName().equals("hash")) {
             if (node.hasChildNodes()) {
                 NodeList children = node.getChildNodes();
@@ -84,18 +84,15 @@ public class XMLHash {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public void write(File target, Hashtable table) {
+    public void write(File target, Map<String, String>table) {
         XMLNode root = new XMLNode("hash"), current;
         current = root;
 
-        Enumeration myKeys = table.keys();
-
         int pos = 0;
 
-        while (myKeys.hasMoreElements()) {//<data name="ftp" data="3d2toy.xml"/>
-            String key = (String) myKeys.nextElement();
+        for (String key : table.keySet()) {//<data name="ftp" data="3d2toy.xml"/>
 
-            String value = (String) table.get(key);
+            String value = table.get(key);
 
 
             XMLNode newNode = new XMLNode("data");

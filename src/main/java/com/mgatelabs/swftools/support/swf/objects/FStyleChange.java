@@ -5,25 +5,26 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FStyleChange {
        /*
          TypeFlag        	      UB[1] = 0        	      Non-edge record flag
    	  StateNewStyles      	     NewStyles = UB[1]      	     New styles flag. Used by DefineShape2 and DefineShape3 only.     
-   	  StateLineStyle      	     LineStyle = UB[1]      	     Line style change flag     
-   	  StateFillStyle1      	     FillStyle1 = UB[1]      	     Fill style 1 change flag     
-   	  StateFillStyle0      	     FillStyle0 = UB[1]      	     Fill style 0 change flag     
+   	  StateLineStyle      	     lineStyle = UB[1]      	     Line style change flag
+   	  StateFillStyle1      	     fillStyle1 = UB[1]      	     Fill style 1 change flag
+   	  StateFillStyle0      	     fillStyle0 = UB[1]      	     Fill style 0 change flag
    	  StateMoveTo      	     MoveTo = UB[1]      	     Move to flag     
    	  MoveBits      	     If moveTo nMoveBits = UB[5]      	     Move bit count     
-   	  MoveDeltaX      	     If moveTo SB[nMoveBits]      	     Delta X value     
-   	  MoveDeltaY      	     If moveTo SB[nMoveBits]      	     Delta Y value     
-   	  FillStyle0      	     If fillStyle0 UB[nFillBits]      	     Fill 0 Style     
-   	  FillStyle1      	     If fillStyle1 UB[nFillBits]      	     Fill 1 Style     
-   	  LineStyle      	     If lineStyle UB[nLineBits]      	     Line Style     
-   	  FillStyles      	     If newStyles FillStyleArray      	     Array of new fill styles     
-   	  LineStyles      	     If newStyles LineStyleArray      	     Array of new line styles     
+   	  moveDeltaX      	     If moveTo SB[nMoveBits]      	     Delta X value
+   	  moveDeltaY      	     If moveTo SB[nMoveBits]      	     Delta Y value
+   	  fillStyle0      	     If fillStyle0 UB[nFillBits]      	     Fill 0 Style
+   	  fillStyle1      	     If fillStyle1 UB[nFillBits]      	     Fill 1 Style
+   	  lineStyle      	     If lineStyle UB[nLineBits]      	     Line Style
+   	  FillStyles      	     If newStyles fillStyleArray      	     Array of new fill styles
+   	  LineStyles      	     If newStyles lineStyleArray      	     Array of new line styles
    	  NumFillBits      	     If newStyles NfillBits = UB[4]      	     Number of fill index bits for new styles     
    	  NumLineBits      	     If newStyles NlineBits = UB[4]      	     Number of line index bits for new styles
    	*/
@@ -34,13 +35,13 @@ public class FStyleChange {
     private boolean isFillStyle0;
     private boolean isMoveTo;
 
-    private long MoveDeltaX;
-    private long MoveDeltaY;
-    private int FillStyle0;
-    private int FillStyle1;
-    private int LineStyle;
-    private Vector FillStyleArray;
-    private Vector LineStyleArray;
+    private long moveDeltaX;
+    private long moveDeltaY;
+    private int fillStyle0;
+    private int fillStyle1;
+    private int lineStyle;
+    private List<Object> fillStyleArray;
+    private List<Object> lineStyleArray;
 
     public FStyleChange() {
         // Default Everything
@@ -50,70 +51,70 @@ public class FStyleChange {
         isFillStyle0 = false;
         isMoveTo = false;
 
-        MoveDeltaX = 0;
-        MoveDeltaY = 0;
+        moveDeltaX = 0;
+        moveDeltaY = 0;
 
-        FillStyle0 = 0;
-        FillStyle1 = 0;
-        LineStyle = 0;
+        fillStyle0 = 0;
+        fillStyle1 = 0;
+        lineStyle = 0;
 
-        FillStyleArray = new Vector();
-        LineStyleArray = new Vector();
+        fillStyleArray = new ArrayList<>();
+        lineStyleArray = new ArrayList<>();
     }
 
     public void setMoveDeltaX(long aValue) {
         isMoveTo = true;
-        MoveDeltaX = aValue;
+        moveDeltaX = aValue;
     }
 
     public void setMoveDeltaY(long aValue) {
         isMoveTo = true;
-        MoveDeltaY = aValue;
+        moveDeltaY = aValue;
     }
 
     public void setFillStyle0(int aValue) {
         isFillStyle0 = true;
-        FillStyle0 = aValue;
+        fillStyle0 = aValue;
     }
 
     public void setFillStyle1(int aValue) {
         isFillStyle1 = true;
-        FillStyle1 = aValue;
+        fillStyle1 = aValue;
     }
 
     public void setLineStyle(int aValue) {
         isLineStyle = true;
-        LineStyle = aValue;
+        lineStyle = aValue;
     }
 
     public int getFillStyle0() {
-        return FillStyle0;
+        return fillStyle0;
     }
 
     public int getFillStyle1() {
-        return FillStyle1;
+        return fillStyle1;
     }
 
     public int getLineStyle() {
-        return LineStyle;
+        return lineStyle;
     }
 
     public long getMoveDeltaX() {
-        return MoveDeltaX;
+        return moveDeltaX;
     }
 
     public long getMoveDeltaY() {
-        return MoveDeltaY;
+        return moveDeltaY;
     }
 
-    public Vector getFillStyleArray() {
+    public List<Object> getFillStyleArray() {
         isNewStyles = true;
-        return FillStyleArray;
+        return fillStyleArray;
     }
 
-    public Vector getLineStyleArray() {
+    public List<Object> getLineStyleArray() {
         isNewStyles = true;
-        return LineStyleArray;
+        return lineStyleArray;
     }
 
     public boolean isNewStyles() {

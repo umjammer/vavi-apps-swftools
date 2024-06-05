@@ -5,7 +5,8 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FMorphGradient extends FFill {
@@ -16,10 +17,10 @@ public class FMorphGradient extends FFill {
 
     private FMatrix myStartMatrix;
     private FMatrix myEndMatrix;
-    private Vector myGradient;
+    private List<?> myGradient;
     private float alpha;
 
-    public FMorphGradient(int style, FMatrix aStartMatrix, FMatrix aEndMatrix, Vector gradient) {
+    public FMorphGradient(int style, FMatrix aStartMatrix, FMatrix aEndMatrix, List<?> gradient) {
         super(style);
         myStartMatrix = aStartMatrix;
         myEndMatrix = aEndMatrix;
@@ -36,7 +37,7 @@ public class FMorphGradient extends FFill {
 
     // Make a Morphed Shape
     public FFill morph(float per) {
-        Vector newGradients = new Vector();
+        List<Object> newGradients = new ArrayList<>();
 
         for (Object o : myGradient) {
             FMorphGradientRecord a = (FMorphGradientRecord) o;
@@ -74,7 +75,7 @@ public class FMorphGradient extends FFill {
         return myEndMatrix;
     }
 
-    public Vector getGradient() {
+    public List<?> getGradient() {
         return myGradient;
     }
 }

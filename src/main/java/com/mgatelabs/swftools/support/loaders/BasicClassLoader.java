@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 
 public class BasicClassLoader extends ClassLoader {
 
-    public Class findClass(String name, File target) {
+    public Class<?> findClass(String name, File target) {
         byte[] b = loadClassData(target);
 
         if (b == null) {
@@ -16,7 +16,7 @@ public class BasicClassLoader extends ClassLoader {
         return defineClass(name, b, 0, b.length);
     }
 
-    public Class findPackagedClass(String name, String target) {
+    public Class<?> findPackagedClass(String name, String target) {
         try {
             return this.getClass().getClassLoader().loadClass(target);
         } catch (ClassNotFoundException e) {

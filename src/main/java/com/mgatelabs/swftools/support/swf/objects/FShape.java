@@ -5,9 +5,11 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-// Need Vector Support
+// Need List<?> Support
 
-import java.util.Vector;
+import java.util.List;
+
+import com.mgatelabs.swftools.exploit.render.AdvancedPath;
 
 
 public class FShape implements FID {
@@ -24,7 +26,7 @@ public class FShape implements FID {
 
     // Style & Shape Vars
     private FStyle myStyle;
-    private Vector myRenderData;
+    private List<Object> myRenderData;
 
     private boolean myShapeScales;
     private boolean myShapeNotScales;
@@ -89,13 +91,13 @@ public class FShape implements FID {
 
     // Get Render Information
 
-    public Vector getRenderData() {
+    public List<Object> getRenderData() {
         return myRenderData;
     }
 
     // Set the Render Data
 
-    public void setRenderData(Vector val) {
+    public void setRenderData(List<Object> val) {
         myRenderData = val;
     }
 

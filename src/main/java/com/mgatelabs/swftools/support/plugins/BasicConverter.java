@@ -2,7 +2,8 @@ package com.mgatelabs.swftools.support.plugins;
 
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mgatelabs.swftools.exploit.conversion.Converter;
 import com.mgatelabs.swftools.exploit.conversion.RBase;
@@ -84,7 +85,7 @@ public class BasicConverter implements Converter, Plugin {
 
     public void update(FMovie anObject) {
         // Convert Shapes
-        Vector objects = anObject.getObjectVector();
+        List<Object> objects = anObject.getObjectList();
         myObjectTotal = objects.size();
         for (int x = 0; x < objects.size() && !cancel; x++) {
             myObjectValue = x;
@@ -93,7 +94,7 @@ public class BasicConverter implements Converter, Plugin {
             if (o instanceof FShape) {
                 FShape fs = (FShape) o;
 
-                Vector data = update(fs);
+                List<Object> data = update(fs);
 
                 fs.setRenderData(data);
                 fs.clean();
@@ -101,7 +102,7 @@ public class BasicConverter implements Converter, Plugin {
                 FFont ff = (FFont) o;
                 FShape ts = new FShape(3, 0, null);
 
-                Vector[] fontRenderData = ff.getGlyphs();
+                List<?>[] fontRenderData = ff.getGlyphs();
 
                 for (int y = 0; y < ff.getGlyphCount(); y++) {
                     ts.getStyle().setShapeRecords(ff.getGlyphs()[y]);
@@ -113,22 +114,18 @@ public class BasicConverter implements Converter, Plugin {
 
         finished = true;
 
-        if (!cancel) {
-            anObject.setReady(true);
-        } else {
-            anObject.setReady(false);
-        }
+        anObject.setReady(!cancel);
     }
 
-    public Vector update(FShape aShape) {
+    public List<Object> update(FShape aShape) {
         FStyle aShapeStyle = aShape.getStyle();
-        Vector tempLine = new Vector();
-        Vector tempFill = new Vector();
-        Vector result = new Vector();
+        List<Object> tempLine = new ArrayList<>();
+        List<Object> tempFill = new ArrayList<>();
+        List<Object> result = new ArrayList<>();
 
-        Vector fillStyles = aShapeStyle.getFillStyles();
-        Vector lineStyles = aShapeStyle.getLineStyles();
-        Vector records = aShapeStyle.getShapeRecords();
+        List<?> fillStyles = aShapeStyle.getFillStyles();
+        List<?> lineStyles = aShapeStyle.getLineStyles();
+        List<?> records = aShapeStyle.getShapeRecords();
         FFill color1 = null;
         FFill color0 = null;
         FLine line = null;
@@ -300,9 +297,9 @@ public class BasicConverter implements Converter, Plugin {
         return result;
     }
 
-    public void sortPaths(Vector paths, Vector result, boolean fill) {
+    public void sortPaths(List<?> paths, List<Object> result, boolean fill) {
         //System.out.println("Sorting " + paths.size() + (fill ? " Fill" : " Line") + " Paths");
-        Vector currentCtyleGroup = new Vector();
+        List<Object> currentCtyleGroup = new ArrayList<>();
         // Break up Into Style Groups
 
         int initial = paths.size();
@@ -346,10 +343,10 @@ public class BasicConverter implements Converter, Plugin {
         }
     }
 
-    public void testPaths(Vector paths, Vector result, boolean fill) {
+    public void testPaths(List<Object> paths, List<Object> result, boolean fill) {
         //System.out.println("Testing " + paths.size() + (fill ? " Fill" : " Line") + " Paths");
-        Vector currentCtyleGroup = new Vector();
-        Vector tempResults = new Vector();
+        List<Object> currentCtyleGroup = new ArrayList<>();
+        List<Object> tempResults = new ArrayList<>();
 
         while (paths.size() > 0) {
             if (cancel) {
@@ -364,7 +361,7 @@ public class BasicConverter implements Converter, Plugin {
 
             boolean found = true;
 
-            while (found == true) {
+            while (found) {
                 found = false;
                 for (Object path : paths) {
                     RBase temp = (RBase) path;
@@ -379,7 +376,7 @@ public class BasicConverter implements Converter, Plugin {
                 }
             }
 
-            // Now I have a vector of lines of the same style that also touch
+            // Now I have a List<?> of lines of the same style that also touch
             if (currentCtyleGroup.size() > 1) {
                 if (fill) {
                     findFillPaths(currentCtyleGroup, tempResults);
@@ -405,7 +402,7 @@ public class BasicConverter implements Converter, Plugin {
     // Create Line Paths
     // LINE PATHS
 
-    public void findLinePaths(Vector paths, Vector result) {
+    public void findLinePaths(List<Object> paths, List<Object> result) {
         //System.out.println("Line");
         RGraph myGraph = new RGraph(true);
 
@@ -489,10 +486,10 @@ public class BasicConverter implements Converter, Plugin {
     // Create Fill Paths
     // FILL Paths
 
-    public void findFillPaths(Vector paths, Vector result) {
+    public void findFillPaths(List<Object> paths, List<Object> result) {
         //System.out.println("Fill");
         // All Paths now Touch
-        Vector tempResults = new Vector(paths.size() / 2);
+        List<?> tempResults = new ArrayList<>(paths.size() / 2);
         RGraph myGraph = new RGraph(false);
 
         for (Object path : paths) {
@@ -564,7 +561,7 @@ public class BasicConverter implements Converter, Plugin {
         }
     }
 
-    public boolean testPath(Vector paths, RBase path, boolean easy) {
+    public boolean testPath(List<?> paths, RBase path, boolean easy) {
         for (Object o : paths) {
             RBase temp = (RBase) o;
             if (path.touch(temp, easy)) {

@@ -5,14 +5,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 
 public class XMLNode {
     public XMLNode next, sub;
     private XMLNode lastPeer;
-    public Vector properties;
+    public List<DualString> properties;
     public String title;
 
     ////////////////////////////////////////////////////////////////////////////
@@ -22,7 +23,7 @@ public class XMLNode {
         next = null;
         sub = null;
         lastPeer = null;
-        properties = new Vector();
+        properties = new ArrayList<>();
     }
 
     public void addChild(XMLNode aChild) {
@@ -92,8 +93,8 @@ public class XMLNode {
     ////////////////////////////////////////////////////////////////////////////
 
     public String getProperty(String name) {
-        for (Object property : properties) {
-            DualString ds = (DualString) property;
+        for (DualString property : properties) {
+            DualString ds = property;
             if (ds.key.equals(name)) {
                 return ds.value;
             }
@@ -123,7 +124,7 @@ public class XMLNode {
             bw.write(temp.title);
 
             for (int x = 0; x < temp.properties.size(); x++) {
-                DualString prop = (DualString) temp.properties.elementAt(x);
+                DualString prop = temp.properties.get(x);
                 bw.write(" " + prop.key + "=\"" + prop.value + "\"");
             }
 

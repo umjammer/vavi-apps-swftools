@@ -13,7 +13,7 @@
 
 package com.mgatelabs.swftools.support.swf.tags;
 
-import java.util.Vector;
+import java.util.List;
 
 
 public class TBlock {
@@ -21,13 +21,13 @@ public class TBlock {
     private int myId;
     private long mySize;
     private byte[] myData;
-    private Vector myVector;
+    private List<?> myList;
 
     public TBlock(int id, long size) {
         myId = id;
         mySize = size;
         myData = null;
-        myVector = null;
+        myList = null;
     }
 
     public int getId() {
@@ -42,16 +42,16 @@ public class TBlock {
         return myData;
     }
 
-    public Vector getVector() {
-        return myVector;
+    public List<?> getList() {
+        return myList;
     }
 
     public void setData(byte[] data) {
         myData = data;
     }
 
-    public void setVector(Vector data) {
-        myVector = data;
+    public void setList(List<?> data) {
+        myList = data;
     }
 
     public String toString() {

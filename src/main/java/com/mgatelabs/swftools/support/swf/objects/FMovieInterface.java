@@ -5,7 +5,7 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.util.Vector;
+import java.util.List;
 
 import com.mgatelabs.swftools.support.swf.tags.Tag;
 
@@ -23,7 +23,7 @@ public interface FMovieInterface {
     String toString();
 
     // Animation Tags
-    Vector getTags();
+    List<?> getTags();
 
     void addTag(Tag tag);
 }

@@ -14,7 +14,8 @@
 package com.mgatelabs.swftools.support.swf.io;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mgatelabs.swftools.exploit.control.AppControl;
 import com.mgatelabs.swftools.support.swf.objects.CXFORMALPHA;
@@ -168,7 +169,7 @@ public class TypeReader {
     }
 
     // Gradient
-    public Vector gradient(int type, int sFormat, int format) throws IOException {
+    public List<?> gradient(int type, int sFormat, int format) throws IOException {
       	/*
       		if(tag == DefineShape4)
       		{
@@ -200,17 +201,17 @@ public class TypeReader {
 
         //System.out.println("Grad Records: " + count);
 
-        Vector myVector = new Vector(f_count);
+        List<Object> myList = new ArrayList<>(f_count);
 
         for (int x = 0; x < f_count; x++) {
-            myVector.add(gradrecord(format));
+            myList.add(gradrecord(format));
         }
 
         if (type == 0x13) {
             bl.ui16();
         }
 
-        return myVector;
+        return myList;
     }
 
     // GradRecord
@@ -404,20 +405,20 @@ public class TypeReader {
         return new FMorphLine(bl.ui16(), bl.ui16(), rgba(3), rgba(3));
     }
 
-    public Vector morphGradient() throws IOException {
+    public List<FMorphGradientRecord> morphGradient() throws IOException {
       	/*
       		NumGradients      nGrads = UI8         	      1 to 8      
       		GradientRecords   GRADRECORD [nGradients]      	     Gradient records - see below  
       	*/
         int count = (int) bl.ui8();
 
-        Vector myVector = new Vector(count);
+        List<FMorphGradientRecord> myList = new ArrayList<>(count);
 
         for (int x = 0; x < count; x++) {
-            myVector.add(morphGradRecord());
+            myList.add(morphGradRecord());
         }
 
-        return myVector;
+        return myList;
     }
 
     // GradRecord

@@ -2,7 +2,7 @@ package com.mgatelabs.swftools.support.plugins;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.Map;
 
 import com.mgatelabs.swftools.support.xml.XMLHash;
 
@@ -22,38 +22,38 @@ public class PluginInfo {
     public PluginInfo(String path, InputStream xmlStream, boolean packaged) {
 
         XMLHash reader = new XMLHash();
-        Hashtable myHash = reader.read(xmlStream);
+        Map<String, String> myHash = reader.read(xmlStream);
         this.packaged = packaged;
 
-        name = (String) myHash.get("name");
-        fileName = (String) myHash.get("file");
+        name = myHash.get("name");
+        fileName = myHash.get("file");
         this.className = path + myHash.get("class");
-        description = (String) myHash.get("description");
+        description = myHash.get("description");
         encrypted = false;
 
-        id = Integer.parseInt((String) myHash.get("id"));
-        type = Integer.parseInt((String) myHash.get("type"));
+        id = Integer.parseInt(myHash.get("id"));
+        type = Integer.parseInt(myHash.get("type"));
 
-        major = Integer.parseInt((String) myHash.get("major"));
-        minor = Integer.parseInt((String) myHash.get("minor"));
+        major = Integer.parseInt(myHash.get("major"));
+        minor = Integer.parseInt(myHash.get("minor"));
     }
 
     public PluginInfo(File target, boolean packaged) {
         XMLHash reader = new XMLHash();
-        Hashtable myHash = reader.read(target);
+        Map<String, String>myHash = reader.read(target);
         this.packaged = packaged;
 
-        name = (String) myHash.get("name");
-        fileName = (String) myHash.get("file");
-        className = (String) myHash.get("class");
-        description = (String) myHash.get("description");
+        name = myHash.get("name");
+        fileName = myHash.get("file");
+        className = myHash.get("class");
+        description = myHash.get("description");
         encrypted = false;
 
-        id = Integer.parseInt((String) myHash.get("id"));
-        type = Integer.parseInt((String) myHash.get("type"));
+        id = Integer.parseInt(myHash.get("id"));
+        type = Integer.parseInt(myHash.get("type"));
 
-        major = Integer.parseInt((String) myHash.get("major"));
-        minor = Integer.parseInt((String) myHash.get("minor"));
+        major = Integer.parseInt(myHash.get("major"));
+        minor = Integer.parseInt(myHash.get("minor"));
     }
 
     public String toString() {

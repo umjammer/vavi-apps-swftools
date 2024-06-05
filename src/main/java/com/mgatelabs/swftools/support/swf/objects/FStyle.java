@@ -5,21 +5,22 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FStyle {
-    private Vector myLineStyles;
-    private Vector myFillStyles;
+    private List<Object> myLineStyles;
+    private List<Object> myFillStyles;
     int NfillBits;
     int NumLineBits;
-    private Vector myShapeRecords;
+    private List<Object> myShapeRecords;
 
     public FStyle() {
         // Default Everything
-        myLineStyles = new Vector();
-        myFillStyles = new Vector();
-        myShapeRecords = new Vector();
+        myLineStyles = new ArrayList<>();
+        myFillStyles = new ArrayList<>();
+        myShapeRecords = new ArrayList<>();
         NfillBits = 0;
         NumLineBits = 0;
     }
@@ -53,23 +54,23 @@ public class FStyle {
 
     // Get my Line Styles
 
-    public Vector getLineStyles() {
+    public List<Object> getLineStyles() {
         return myLineStyles;
     }
 
     // Get my Fill Styles
 
-    public Vector getFillStyles() {
+    public List<Object> getFillStyles() {
         return myFillStyles;
     }
 
     // Get my Shape Records
 
-    public Vector getShapeRecords() {
+    public List<Object> getShapeRecords() {
         return myShapeRecords;
     }
 
-    public void setShapeRecords(Vector vec) {
+    public void setShapeRecords(List<Object> vec) {
         myShapeRecords = vec;
     }
 }

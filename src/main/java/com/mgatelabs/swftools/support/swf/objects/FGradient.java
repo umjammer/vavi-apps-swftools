@@ -5,7 +5,7 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-import java.util.Vector;
+import java.util.List;
 
 
 public class FGradient extends FFill {
@@ -15,10 +15,10 @@ public class FGradient extends FFill {
    	*/
 
     private FMatrix myMatrix;
-    private Vector myGradient;
+    private List<?> myGradient;
     private float alpha;
 
-    public FGradient(int format, int style, FMatrix matrix, Vector gradient) {
+    public FGradient(int format, int style, FMatrix matrix, List<?> gradient) {
         super(style);
         myMatrix = matrix;
         myGradient = gradient;
@@ -44,7 +44,7 @@ public class FGradient extends FFill {
         return myMatrix;
     }
 
-    public Vector getGradient() {
+    public List<?> getGradient() {
         return myGradient;
     }
 }

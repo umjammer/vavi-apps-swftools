@@ -15,7 +15,8 @@ package com.mgatelabs.swftools.support.swf.io;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mgatelabs.swftools.support.swf.objects.FMovie;
 import com.mgatelabs.swftools.support.swf.objects.FRect;
@@ -81,10 +82,10 @@ public class BlockIO {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public Vector readBlocks(long size) throws Exception {
+    public List<TBlock> readBlocks(long size) throws Exception {
         Tag aTag;
         TBlock tblock;
-        Vector results = new Vector();
+        List<TBlock> results = new ArrayList<>();
         long startByte;
         long endByte = 0;
 
@@ -107,7 +108,7 @@ public class BlockIO {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public boolean writeFlash(File target, FMovie aMovie, Vector data, boolean compress) throws Exception {
+    public boolean writeFlash(File target, FMovie aMovie, List<?> data, boolean compress) throws Exception {
         try {
             bo = new BitOutput(Files.newOutputStream(target.toPath()));
             myTypeWriter = new TypeWriter(bo, aMovie.getVersion());
@@ -155,7 +156,7 @@ public class BlockIO {
      * Flash Movies are picky about their file size field, so it must be known beforehand.
      */
 
-    public long determineFlashSize(FMovie aMovie, Vector blocks) {
+    public long determineFlashSize(FMovie aMovie, List<?> blocks) {
         long size = 3;
         size += 1;
         size += 4;

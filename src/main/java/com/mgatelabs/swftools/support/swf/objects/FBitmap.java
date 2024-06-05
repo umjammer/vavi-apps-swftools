@@ -9,7 +9,7 @@
 
 package com.mgatelabs.swftools.support.swf.objects;
 
-// Need Vector Support
+// Need List<?> Support
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;

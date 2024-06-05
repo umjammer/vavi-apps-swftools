@@ -7,7 +7,7 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 ////////////////////////////////////////////////////////////////////////////
 
-import java.util.Vector;
+import java.util.List;
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@ public class FFont implements FID {
     private String myName;
     private long[] myGlyphOffsetTable;
     private int[] myCodeOffsets;
-    private Vector[] myGlyphs;
+    private List<Object>[] myGlyphs;
     private int myID;
 
     private int myFontAscent;
@@ -102,11 +102,11 @@ public class FFont implements FID {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public void setGlyphs(Vector[] glyphs) {
+    public void setGlyphs(List<Object>[] glyphs) {
         myGlyphs = glyphs;
     }
 
-    public Vector[] getGlyphs() {
+    public List<Object>[] getGlyphs() {
         return myGlyphs;
     }
 

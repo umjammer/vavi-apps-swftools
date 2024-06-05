@@ -4,8 +4,9 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Stack;
-import java.util.Vector;
+import java.util.List;
 
 import com.mgatelabs.swftools.exploit.conversion.AdvPathLink;
 import com.mgatelabs.swftools.exploit.conversion.AdvPathLinkList;
@@ -95,7 +96,7 @@ public class AdvancedConverter implements Converter, Plugin {
 
     public void update(FMovie anObject) {
         // Convert Shapes
-        Vector objects = anObject.getObjectVector();
+        List<Object> objects = anObject.getObjectList();
         myObjectTotal = objects.size();
         for (int x = 0; x < objects.size() && !cancel; x++) {
             myObjectValue = x;
@@ -103,7 +104,7 @@ public class AdvancedConverter implements Converter, Plugin {
 
             if (o instanceof FShape) {
                 FShape fs = (FShape) o;
-                Vector data = update(fs, false);
+                List<Object> data = update(fs, false);
 
                 fs.setRenderData(data);
                 fs.clean();
@@ -111,7 +112,7 @@ public class AdvancedConverter implements Converter, Plugin {
                 FFont ff = (FFont) o;
                 FShape ts = new FShape(3, 0, null);
 
-                Vector[] fontRenderData = ff.getGlyphs();
+                List<?>[] fontRenderData = ff.getGlyphs();
 
                 for (int y = 0; y < ff.getGlyphCount(); y++) {
                     ts.getStyle().setShapeRecords(ff.getGlyphs()[y]);
@@ -122,27 +123,25 @@ public class AdvancedConverter implements Converter, Plugin {
 
         finished = true;
 
-        if (!cancel) {
-            anObject.setReady(true);
-        } else {
-            anObject.setReady(false);
-        }
+        anObject.setReady(!cancel);
     }
 
-    public Vector update(FShape aShape, boolean skipAdvanced) {
+    public List<Object> update(FShape aShape, boolean skipAdvanced) {
         // Advanced
         myStatus = 0;
         FStyle aShapeStyle = aShape.getStyle();
-        Vector tempShapes = new Vector();
-        Vector result = new Vector();
+        List<Object> tempShapes = new ArrayList<>();
+        List<Object> result = new ArrayList<>();
 
-        Vector fillStyles = aShapeStyle.getFillStyles();
-        Vector lineStyles = aShapeStyle.getLineStyles();
+        List<?> fillStyles = aShapeStyle.getFillStyles();
+        List<?> lineStyles = aShapeStyle.getLineStyles();
 
-        Vector allFillStyles = (Vector) fillStyles.clone();
-        Vector allLineStyles = (Vector) lineStyles.clone();
+        @SuppressWarnings("unchecked")
+        List<Object> allFillStyles = (List<Object>) ((ArrayList<Object>) fillStyles).clone();
+        @SuppressWarnings("unchecked")
+        List<Object> allLineStyles = (List<Object>) ((ArrayList<Object>) lineStyles).clone();
 
-        Vector records = aShapeStyle.getShapeRecords();
+        List<?> records = aShapeStyle.getShapeRecords();
 
         FFill color1 = null;
         FFill color0 = null;
@@ -150,7 +149,7 @@ public class AdvancedConverter implements Converter, Plugin {
         long startX = 0;
         long startY = 0;
 
-        Stack myQueue = new Stack();
+        Stack<Object> myQueue = new Stack<>();
         boolean holdLines = false;
 
         myValue = 0;
@@ -349,7 +348,7 @@ public class AdvancedConverter implements Converter, Plugin {
         return result;
     }
 
-    public void sortPaths(Vector fillStyles, Vector lineStyles, Vector paths, Vector results) {
+    public void sortPaths(List<?> fillStyles, List<?> lineStyles, List<Object> paths, List<Object> results) {
         myStatus = 1;
 
         int graphSize = fillStyles.size() + lineStyles.size() + 1;
@@ -375,16 +374,16 @@ public class AdvancedConverter implements Converter, Plugin {
             {
                 //System.out.print("F");
                 RNode resultAddNode = myGraphs[(fillStyles.indexOf(rb.getFill()))].addToNodeLibrary(rb, x);
-                paths.setElementAt(resultAddNode, x);
+                paths.set(x, resultAddNode);
             } else if (rb.getLine() != null) // Has Stroke
             {
                 //System.out.print("L");
                 RNode resultAddNode = myGraphs[(fillStyles.size() + lineStyles.indexOf(rb.getLine()))].addToNodeLibrary(rb, x);
-                paths.setElementAt(resultAddNode, x);
+                paths.set(x, resultAddNode);
             } else // No Stroke or Fill
             {
                 RNode resultAddNode = myGraphs[fillStyles.size() + lineStyles.size()].addToNodeLibrary(rb, x);
-                paths.setElementAt(resultAddNode, x);
+                paths.set(x, resultAddNode);
             }
         }
         //System.out.print("\n");
@@ -555,7 +554,7 @@ public class AdvancedConverter implements Converter, Plugin {
 
     // Create Line(Fill) Paths
 
-    public static GeneralPath convertLine(RNode root, Vector result) {
+    public static GeneralPath convertLine(RNode root, List<?> result) {
 
         RNode troot = root;
         RGraph myGraph = root.getGraph();
@@ -705,7 +704,7 @@ public class AdvancedConverter implements Converter, Plugin {
         return false;
     }
 
-    public GeneralPath convertFill(RNode root, Vector result) {
+    public GeneralPath convertFill(RNode root, List<?> result) {
 
         RNode troot = root;
         //RGraph myGraph = root.getGraph();

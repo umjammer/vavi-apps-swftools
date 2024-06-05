@@ -1,8 +1,10 @@
 package com.mgatelabs.swftools.support.swf.objects;
 
 import java.awt.Color;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.mgatelabs.swftools.support.swf.tags.Tag;
 
@@ -10,10 +12,10 @@ import com.mgatelabs.swftools.support.swf.tags.Tag;
 public class FMovie implements FMovieInterface {
     // The Flash Object Must Contain Information
 
-    Hashtable myObjects;
-    Vector myObjectVector;
+    Map<Object, Object> myObjects;
+    List<Object> myObjectList;
 
-    Vector myTags;
+    List<Tag> myTags;
 
     private String mySignature;
     private long myVersion;
@@ -30,10 +32,10 @@ public class FMovie implements FMovieInterface {
     // Create A Flash Object
 
     public FMovie(String aSignature, long version, long fileLength, FRect aRect, float frameRate, long frameCount) {
-        myObjects = new Hashtable();
+        myObjects = new HashMap<>();
 
-        myObjectVector = new Vector();
-        myTags = new Vector();
+        myObjectList = new ArrayList<>();
+        myTags = new ArrayList<>();
 
         // Setup Variables
         this.mySignature = aSignature;
@@ -57,7 +59,7 @@ public class FMovie implements FMovieInterface {
 
     public void clean() {
         myObjects = null;
-        myObjectVector = null;
+        myObjectList = null;
         myTags = null;
     }
 
@@ -122,15 +124,15 @@ public class FMovie implements FMovieInterface {
     public void add(int index, Object obj) {
         myObjects.put("" + index, obj);
 
-        myObjectVector.add(obj);
+        myObjectList.add(obj);
     }
 
-    public Hashtable getObjects() {
+    public Map<Object, Object>getObjects() {
         return myObjects;
     }
 
-    public Vector getObjectVector() {
-        return myObjectVector;
+    public List<Object> getObjectList() {
+        return myObjectList;
     }
 
     // Tags
@@ -139,7 +141,7 @@ public class FMovie implements FMovieInterface {
         myTags.add(tag);
     }
 
-    public Vector getTags() {
+    public List<?> getTags() {
         return myTags;
     }
 

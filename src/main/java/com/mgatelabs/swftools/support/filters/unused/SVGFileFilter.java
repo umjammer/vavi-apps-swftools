@@ -9,6 +9,6 @@ public class SVGFileFilter extends javax.swing.filechooser.FileFilter {
     }
 
     public String getDescription() {
-        return "SVG, Scalable Vector Graphics";
+        return "SVG, Scalable List<?> Graphics";
     }
 }

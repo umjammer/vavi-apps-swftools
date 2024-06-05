@@ -148,6 +148,9 @@ public class PlaceObject {
     // Set Vars
 
     public void setDepth(int aDepth) {
+if (aDepth < 1) {
+    new Exception("aDepth must be larger than 0: " + aDepth).printStackTrace();
+}
         myDepth = aDepth;
     }
 
@@ -203,5 +206,26 @@ public class PlaceObject {
 
     public CXFORMALPHA getCXFORM() {
         return myCXFORMALPHA;
+    }
+
+    @Override
+    public String toString() {
+        return "PlaceObject{" +
+                "PlaceFlagHasClipActions=" + PlaceFlagHasClipActions +
+                ", PlaceFlagReserved=" + PlaceFlagReserved +
+                ", PlaceFlagHasName=" + PlaceFlagHasName +
+                ", PlaceFlagHasRatio=" + PlaceFlagHasRatio +
+                ", PlaceFlagHasColorTransform=" + PlaceFlagHasColorTransform +
+                ", PlaceFlagHasMatrix=" + PlaceFlagHasMatrix +
+                ", PlaceFlagHasCharacter=" + PlaceFlagHasCharacter +
+                ", PlaceFlagMove=" + PlaceFlagMove +
+                ", myDepth=" + myDepth +
+                ", myClipDepth=" + myClipDepth +
+                ", myID=" + myID +
+                ", myRatio=" + myRatio +
+                ", myMatrix=" + myMatrix +
+                ", myName='" + myName + '\'' +
+                ", myCXFORMALPHA=" + myCXFORMALPHA +
+                '}';
     }
 }

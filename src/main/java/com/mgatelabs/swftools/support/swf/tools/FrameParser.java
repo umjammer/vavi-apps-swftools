@@ -16,7 +16,7 @@ package com.mgatelabs.swftools.support.swf.tools;
 
 // Get flash Objects
 
-import java.util.Vector;
+import java.util.List;
 
 import com.mgatelabs.swftools.support.swf.objects.FColor;
 import com.mgatelabs.swftools.support.swf.objects.FDisplayListItem;
@@ -26,9 +26,10 @@ import com.mgatelabs.swftools.support.swf.objects.FMovieInterface;
 import com.mgatelabs.swftools.support.swf.tags.PlaceObject;
 import com.mgatelabs.swftools.support.swf.tags.RemoveObject;
 import com.mgatelabs.swftools.support.swf.tags.Tag;
+import vavi.util.Debug;
 
 // Get flash Tags
-// Need Vector support
+// Need List<?> support
 
 // The Frame Parser
 
@@ -36,9 +37,9 @@ public class FrameParser {
 
     public static int nextFrame(FMovieData movieData, int tagLocation, FMovie core) {
         // Get DisplayList
-        Vector displayList = movieData.getDisplayList();
+        List<FDisplayListItem> displayList = movieData.getDisplayList();
         FMovieInterface movie = movieData.getMovie();
-        Vector tags = movie.getTags();
+        List<?> tags = movie.getTags();
 
         //System.out.println("Tag Location: " + tagLocation);
 
@@ -83,12 +84,11 @@ public class FrameParser {
                     // }
                     displayList.clear(); // Clear the display, time to start over again
                 }
-            } else if (tag.getID() == 1) // Show Frame
-            {
+            } else if (tag.getID() == 1) { // Show Frame
                 // Update Frames and Such
                 // Go through frames and make movies move up a frame
-                for (Object o : displayList) {
-                    FDisplayListItem di = (FDisplayListItem) o;
+                for (FDisplayListItem o : displayList) {
+                    FDisplayListItem di = o;
                     if (di == null) {
 
                     } else if (di.getObject() instanceof FMovieData) {
@@ -97,13 +97,12 @@ public class FrameParser {
                 }
 
                 keepGoing = false;
-            } else if (tag.getID() == 9) // Set Background Color
-            {
+            } else if (tag.getID() == 9) { // Set Background Color
                 movieData.setBackgroundColor(((FColor) tag.getObject()).toColor());
-            } else if (tag.getID() == 70 || tag.getID() == 26 || tag.getID() == 4) // Place Object 2
-            {
+            } else if (tag.getID() == 70 || tag.getID() == 26 || tag.getID() == 4) { // Place Object 2
                 // Going to mess with the display list;
                 PlaceObject po2 = (PlaceObject) tag.getObject();
+Debug.println(po2);
                 FDisplayListItem aItem = null;
 
                 targetDepth = po2.getDepth() - 1;
@@ -120,11 +119,11 @@ public class FrameParser {
                             t = new FMovieData((FMovieInterface) t);
                         }
 
-                        if (targetDepth < displayList.size() && displayList.get(targetDepth) != null && ((FDisplayListItem) displayList.get(targetDepth)).getInsertFrame() == movieData.getFrame()) {
-                            aItem = (FDisplayListItem) displayList.get(targetDepth);
+                        if (targetDepth < displayList.size() && displayList.get(targetDepth) != null && displayList.get(targetDepth).getInsertFrame() == movieData.getFrame()) {
+                            aItem = displayList.get(targetDepth);
                         } else {
                             aItem = new FDisplayListItem(t, po2.getID(), name, movieData.getFrame());
-                            insertDataIntoVector(targetDepth, displayList, aItem);
+                            insertDataIntoList(targetDepth, displayList, aItem);
                         }
                     } else {
                         //System.out.println("Object Not Found");
@@ -141,7 +140,7 @@ public class FrameParser {
                         continue;
                     }
 
-                    aItem = (FDisplayListItem) displayList.get(targetDepth);
+                    aItem = displayList.get(targetDepth);
 
                     if (aItem == null) {
                         //System.out.println("Tryign to modify null item");
@@ -163,16 +162,16 @@ public class FrameParser {
                     }
 
                     if (targetDepth < displayList.size()) {
-                        aItem = (FDisplayListItem) displayList.get(targetDepth);
+                        aItem = displayList.get(targetDepth);
                         if (aItem == null) {
                             aItem = new FDisplayListItem(t, po2.getID(), name, movieData.getFrame());
-                            insertDataIntoVector(targetDepth, displayList, aItem);
+                            insertDataIntoList(targetDepth, displayList, aItem);
                         } else {
                             aItem.setObject(t);
                         }
                     } else {
                         aItem = new FDisplayListItem(t, po2.getID(), name, movieData.getFrame());
-                        insertDataIntoVector(targetDepth, displayList, aItem);
+                        insertDataIntoList(targetDepth, displayList, aItem);
                     }
                 }
 
@@ -203,7 +202,7 @@ public class FrameParser {
                 targetDepth = ro.getDepth() - 1;
                 //System.out.println("Remove Depth " + (ro.getDepth() -1));
                 if (targetDepth < displayList.size()) {
-                    displayList.setElementAt(null, ro.getDepth() - 1);
+                    displayList.set(ro.getDepth() - 1, null);
                 }
             }
 
@@ -215,16 +214,16 @@ public class FrameParser {
 
     // Used to get around errors involving the display list
     // Objects may be missing from the tag library so they are missing in the movie
-    public static void insertDataIntoVector(int depth, Vector displayList, FDisplayListItem aItem) {
+    public static void insertDataIntoList(int depth, List<FDisplayListItem> displayList, FDisplayListItem aItem) {
         if (depth == displayList.size()) {
-            displayList.insertElementAt(aItem, depth);
+            displayList.add(depth, aItem);
         } else if (depth > displayList.size()) {
             while (depth > displayList.size()) {
                 displayList.add(null);
             }
-            displayList.insertElementAt(aItem, depth);
+            displayList.add(depth, aItem);
         } else if (depth < displayList.size()) {
-            displayList.setElementAt(aItem, depth);
+            displayList.set(depth, aItem);
         }
     }
 
