@@ -4,7 +4,7 @@ public class FTextRecord {
     /*
     Field							Type										Comment
     TextRecordType				UB [1] = 1								1 if text stage change record
-    TextReserved				UB [3]									Reserved � always 0
+    TextReserved				UB [3]									Reserved – always 0
     TextHasFont					HasFont = UB [1]						1 if text font specified
     TextHasColor				HasColor = UB [1]						1 if text color specified
     TextHasYOffset				HasYOffset = UB [1]					1 if Y offset specified

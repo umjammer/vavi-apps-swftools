@@ -849,7 +849,7 @@ public class TagReader {
       TextRecordType				UB [1]									0 = glyph record, 1 = text style record   
            
       TextRecordType				UB [1] = 1								1 if text stage change record     
-      TextReserved				UB [3]									Reserved � always 0     
+      TextReserved				UB [3]									Reserved – always 0
       TextHasFont					HasFont = UB [1]						1 if text font specified     
       TextHasColor				HasColor = UB [1]						1 if text color specified     
       TextHasYOffset				HasYOffset = UB [1]					1 if Y offset specified     
@@ -863,7 +863,7 @@ public class TagReader {
       
       TextRecordType				UB [1] = 0								0 if text glyph record      
       TextGlyphCount				nGlyphs = UB [7]						Number of glyphs in record     
-      TextGlyphEntries			GLYPHENTRY[nGlyphs]					Glyph entry � see below 
+      TextGlyphEntries			GLYPHENTRY[nGlyphs]					Glyph entry – see below
       */
         int recordType;
 
@@ -888,7 +888,7 @@ public class TagReader {
             break;
             case 1: {
                   /*
-                  TextReserved				UB [3]									Reserved � always 0     
+                  TextReserved				UB [3]									Reserved – always 0
                   TextHasFont					HasFont = UB [1]						1 if text font specified     
                   TextHasColor				HasColor = UB [1]						1 if text color specified     
                   TextHasYOffset				HasYOffset = UB [1]					1 if Y offset specified     
@@ -1569,7 +1569,7 @@ public class TagReader {
         //System.out.println("Font Name: " + fontName);
 
 
-        //FontGlyphCount 	UI16 	Count of Glyphs in font � nGlyphs
+        //FontGlyphCount 	UI16 	Count of Glyphs in font – nGlyphs
         int glyphCount = (int) bl.ui16();
 
         aFont.setGlyphCount(glyphCount);
@@ -1622,9 +1622,9 @@ public class TagReader {
       /*
       	FontCodeTable        	      If FontFlagsWideCodes is 1, UI16 [nGlyphs] else UI8 [nGlyphs]        	           
       	
-      	FontAscent      	     			If FontFlagsHasLayout is 1, SI16 � Font ascender height      	         
-      	FontDescent      	     			If FontFlagsHasLayout is 1, SI16 � Font descender height      	         
-      	FontLeading      	     			If FontFlagsHasLayout is 1, SI16 � Font leading height      	         
+      	FontAscent      	     			If FontFlagsHasLayout is 1, SI16 – Font ascender height
+      	FontDescent      	     			If FontFlagsHasLayout is 1, SI16 – Font descender height
+      	FontLeading      	     			If FontFlagsHasLayout is 1, SI16 – Font leading height
       	FontAdvance Table      	     	If FontFlagsHasLayout is 1, SI16 [nGlyphs]      	         
       	FontBoundsTable      	     	If FontFlagsHasLayout is 1, RECT [nGlyphs]      	     Not used in Flash Player 4     
       	FontKerningCount      	     	If FontFlagsHasLayout is 1, nCount = UI16      	     Not used in Flash Player 4     
