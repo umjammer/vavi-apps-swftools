@@ -148,8 +148,8 @@ public class PlaceObject {
     // Set Vars
 
     public void setDepth(int aDepth) {
-if (aDepth < 1) {
-    new Exception("aDepth must be larger than 0: " + aDepth).printStackTrace();
+if (aDepth < 0) {
+    new Exception("aDepth must be larger than or equal to 0: " + aDepth).printStackTrace();
 }
         myDepth = aDepth;
     }

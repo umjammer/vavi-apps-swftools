@@ -155,10 +155,9 @@ public class TagReader {
                 }
                 break;
             case 2: // DefineShape
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
+                if (myFilter.getFilter(FlashFilter.SHAPE)) // Otherwise Skip, Bad Format
                 {
                     FShape aShape = parseDefineShape(1);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
                 }
                 break;
@@ -179,7 +178,6 @@ public class TagReader {
             case 6:  // Define Bits 1
                 if (myFilter.getFilter(FlashFilter.BITMAP)) {
                     FBitmap aBitmap = myImageReader.parseBitmap(1, aTag.length);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aBitmap.getID(), aBitmap);
                 }
                 break;
@@ -206,7 +204,6 @@ public class TagReader {
             {
                 FFont aFont = parseDefineFont();
                 if (aFont != null) {
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aFont.getID(), aFont);
                 }
             }
@@ -215,7 +212,6 @@ public class TagReader {
             {
                 FText aText = parseText(1);
                 if (aText != null) {
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aText.getID(), aText);
                 }
             }
@@ -230,7 +226,6 @@ public class TagReader {
             case 14: // Define Sound
                 if (myFilter.getFilter(FlashFilter.SOUND)) {
                     FSound aSound = DefineSound(aTag.length);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aSound.getID(), aSound);
                 }
                 break;
@@ -268,21 +263,18 @@ public class TagReader {
             case 20:
                 if (myFilter.getFilter(FlashFilter.BITMAP)) {
                     FLossless aLossless = myImageReader.parseLossless(1, (int) aTag.length);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aLossless.getID(), aLossless);
                 }
                 break;
             case 21: // Define Bits 2
                 if (myFilter.getFilter(FlashFilter.BITMAP)) {
                     FBitmap aBitmap = myImageReader.parseBitmap(2, aTag.length);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aBitmap.getID(), aBitmap);
                 }
                 break;
             case 22: // DefineShape2
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
+                if (myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
                     FShape aShape = parseDefineShape(2);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
                 }
                 break;
@@ -306,16 +298,14 @@ public class TagReader {
             }
             break;
             case 32: // DefineShape3
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
+                if (myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
                     FShape aShape = parseDefineShape(3);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
                 }
                 break;
             case 33: // DefineText2
                 FText aText = parseText(2);
                 if (aText != null) {
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aText.getID(), aText);
                 }
                 break;
@@ -325,7 +315,6 @@ public class TagReader {
             case 35: // Define Bits 3
                 if (myFilter.getFilter(FlashFilter.BITMAP)) {
                     FBitmap aBitmap = myImageReader.parseBitmap(3, aTag.length);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aBitmap.getID(), aBitmap);
                 }
                 break;
@@ -333,7 +322,6 @@ public class TagReader {
                 if (myFilter.getFilter(FlashFilter.BITMAP)) {
                     FLossless aLossless = myImageReader.parseLossless(2, (int) aTag.length);
                     if (aLossless != null) {
-                        coreMovie = (FMovie) myMovie;
                         coreMovie.add(aLossless.getID(), aLossless);
                     }
                 }
@@ -346,7 +334,6 @@ public class TagReader {
             case 39: // DefineSprite
                 if (myFilter.getFilter(FlashFilter.SHAPE)) {
                     FSprite aSprite = parseDefineSprite(depth, longTotalFileLength, myMovie.getCore());
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aSprite.getID(), aSprite);
                 }
                 break;
@@ -354,9 +341,8 @@ public class TagReader {
 
                 break;
             case 46: // DefineMorphShape
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) {
+                if (myFilter.getFilter(FlashFilter.SHAPE)) {
                     FMorph aMorph = parseMorphShape();
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aMorph.getID(), aMorph);
                 }
                 break;
@@ -364,7 +350,6 @@ public class TagReader {
                 if (myFilter.getFilter(FlashFilter.FONT)) {
                     FFont aFont = parseDefineFont2(2);
                     if (aFont != null) {
-                        coreMovie = (FMovie) myMovie;
                         coreMovie.add(aFont.getID(), aFont);
                     }
                 }
@@ -382,15 +367,13 @@ public class TagReader {
                 if (myFilter.getFilter(FlashFilter.FONT)) {
                     FFont aFont = parseDefineFont2(3);
                     if (aFont != null) {
-                        coreMovie = (FMovie) myMovie;
                         coreMovie.add(aFont.getID(), aFont);
                     }
                 }
                 break;
             case 83: // DefineShape4
-                if (depth == 0 && myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
+                if (myFilter.getFilter(FlashFilter.SHAPE)) { // Otherwise Skip, Bad Format
                     FShape aShape = parseDefineShape(4);
-                    coreMovie = (FMovie) myMovie;
                     coreMovie.add(aShape.getID(), aShape);
                 }
                 break;
@@ -1503,6 +1486,7 @@ public class TagReader {
 
         int offsetToStartOfGlyphs = (int) bl.ui16();
         int glyphCount = offsetToStartOfGlyphs / 2;
+        aFont.setGlyphCount(glyphCount);
 
         long[] glyphOffsetTable = new long[glyphCount];
         glyphOffsetTable[0] = offsetToStartOfGlyphs;

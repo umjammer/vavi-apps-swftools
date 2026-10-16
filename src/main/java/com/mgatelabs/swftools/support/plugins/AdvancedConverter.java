@@ -111,6 +111,7 @@ public class AdvancedConverter implements Converter, Plugin {
             } else if (o instanceof FFont) {
                 FFont ff = (FFont) o;
                 FShape ts = new FShape(3, 0, null);
+                ts.getStyle().getFillStyles().add(new com.mgatelabs.swftools.support.swf.objects.FSolid(new com.mgatelabs.swftools.support.swf.objects.FColor(0, 0, 0, 255)));
 
                 List<?>[] fontRenderData = ff.getGlyphs();
 

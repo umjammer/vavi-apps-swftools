@@ -82,7 +82,19 @@ public class FrameParser {
                     // displayList.setElementAt(null, x);
                     // }
                     // }
-                    displayList.clear(); // Clear the display, time to start over again
+                    if (movie.getFrameCount() > 1) {
+                        displayList.clear(); // Clear the display, time to start over again
+                    } else {
+                        for (FDisplayListItem o : displayList) {
+                            FDisplayListItem di = o;
+                            if (di == null) {
+
+                            } else if (di.getObject() instanceof FMovieData) {
+                                ((FMovieData) di.getObject()).nextFrame();
+                            }
+                        }
+                        return 0;
+                    }
                 }
             } else if (tag.getID() == 1) { // Show Frame
                 // Update Frames and Such
@@ -102,10 +114,10 @@ public class FrameParser {
             } else if (tag.getID() == 70 || tag.getID() == 26 || tag.getID() == 4) { // Place Object 2
                 // Going to mess with the display list;
                 PlaceObject po2 = (PlaceObject) tag.getObject();
-Debug.println(po2);
+Debug.println( java.util.logging.Level.FINER, po2);
                 FDisplayListItem aItem = null;
 
-                targetDepth = po2.getDepth() - 1;
+                targetDepth = po2.getDepth();
 
                 if (!po2.getPlaceFlagMove() && po2.getPlaceFlagHasCharacter()) {//PlaceFlagMove = 0 and PlaceFlagHasCharacter = 1
                     //A new character (with ID of CharacterId) is placed on the display list at the
@@ -119,7 +131,7 @@ Debug.println(po2);
                             t = new FMovieData((FMovieInterface) t);
                         }
 
-                        if (targetDepth < displayList.size() && displayList.get(targetDepth) != null && displayList.get(targetDepth).getInsertFrame() == movieData.getFrame()) {
+                        if (targetDepth < displayList.size() && displayList.get(targetDepth) != null && displayList.get(targetDepth).getInsertFrame() == movieData.getFrame() && displayList.get(targetDepth).getID() == po2.getID()) {
                             aItem = displayList.get(targetDepth);
                         } else {
                             aItem = new FDisplayListItem(t, po2.getID(), name, movieData.getFrame());
@@ -183,7 +195,7 @@ Debug.println(po2);
 
                     if (po2.getPlaceFlagHasClipActions()) {
                         aItem.setClipLayer(true);
-                        aItem.setClipDepth(po2.getClipDepth() - 1);
+                        aItem.setClipDepth(po2.getClipDepth());
                     } else {
                         //aItem.setClipLayer(false);
                     }
@@ -199,10 +211,10 @@ Debug.println(po2);
             } else if (tag.getID() == 28) // Remove Object 2
             {
                 RemoveObject ro = (RemoveObject) tag.getObject();
-                targetDepth = ro.getDepth() - 1;
+                targetDepth = ro.getDepth();
                 //System.out.println("Remove Depth " + (ro.getDepth() -1));
                 if (targetDepth < displayList.size()) {
-                    displayList.set(ro.getDepth() - 1, null);
+                    displayList.set(ro.getDepth(), null);
                 }
             }
 
