@@ -5,6 +5,8 @@
 
 # vavi-apps-swftools
 
+SWF Player
+
 ## Install
 
 - [maven](https://jitpack.io/#umjammer/vavi-apps-swftools)
@@ -14,6 +16,7 @@
 ## References
 
 - [original](https://github.com/mgatelabs/SWFTools-Core)
+- https://github.com/umjammer/vavi-apps-javaswf (composer by api)
 
 ## TODO
 
