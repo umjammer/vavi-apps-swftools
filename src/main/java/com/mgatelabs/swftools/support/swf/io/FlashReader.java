@@ -13,6 +13,7 @@
 
 package com.mgatelabs.swftools.support.swf.io;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.nio.file.Files;
 
@@ -37,7 +38,7 @@ public class FlashReader {
 
         try {
             myFilter = aFilter;
-            bi = new BitInput(Files.newInputStream(target.toPath()));
+            bi = new BitInput(new BufferedInputStream(Files.newInputStream(target.toPath())));
             bl = new BitLibrary(bi);
             open = true;
         } catch (Exception e) {

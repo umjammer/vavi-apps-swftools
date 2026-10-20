@@ -13,6 +13,7 @@
 
 package com.mgatelabs.swftools.support.swf.io;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class BlockIO {
 
     public Object[] readFlash(File target) throws Exception {
         try {
-            bi = new BitInput(Files.newInputStream(target.toPath()));
+            bi = new BitInput(new BufferedInputStream(Files.newInputStream(target.toPath())));
             bl = new BitLibrary(bi);
 
         } catch (Exception e) {
@@ -176,7 +177,7 @@ public class BlockIO {
 
     public TBlock readBlock(File target, FMovie aMovie) throws Exception {
         try {
-            bi = new BitInput(Files.newInputStream(target.toPath()));
+            bi = new BitInput(new BufferedInputStream(Files.newInputStream(target.toPath())));
             bl = new BitLibrary(bi);
 
             myTypeReader = new TypeReader(bl, bi, aMovie.getVersion());

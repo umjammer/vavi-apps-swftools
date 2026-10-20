@@ -13,7 +13,12 @@ package com.mgatelabs.swftools.support.swf.objects;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.MemoryCacheImageInputStream;
 
 
 public class FBitmap implements FID, FImage {
@@ -30,15 +35,16 @@ public class FBitmap implements FID, FImage {
 
     byte[] myData;
 
+    /** encoded image waiting to be decoded by {@link #getImage()} */
+    private byte[] myPending;
+
     public FBitmap(int id, byte[] data) {
         myID = id;
         myVersion = 0;
         try {
             myData = data;
-            myImage = ImageIO.read(new ByteArrayInputStream(data));
-
-            myWidth = myImage.getWidth();
-            myHeight = myImage.getHeight();
+            readSize(data);
+            myPending = data;
         } catch (Exception e) {
             System.out.println("Data Error: ID:" + myID + " : " + e.getMessage());
             myImage = null;
@@ -50,12 +56,11 @@ public class FBitmap implements FID, FImage {
         myVersion = version;
         try {
             myData = data;
-            myImage = ImageIO.read(new ByteArrayInputStream(data));
+            readSize(data);
+            myPending = data;
             if (discardData) {
                 myData = null;
             }
-            myWidth = myImage.getWidth();
-            myHeight = myImage.getHeight();
         } catch (Exception e) {
             System.out.println("Data Error: ID:" + myID + " : " + e.getMessage());
             myImage = null;
@@ -64,6 +69,30 @@ public class FBitmap implements FID, FImage {
 
     public FBitmap(int id, byte[] data, byte[] dataA) {
         myID = id;
+    }
+
+    /** reads only the header, decoding pixels is deferred until {@link #getImage()} */
+    private void readSize(byte[] data) throws IOException {
+        try (ImageInputStream iis = new MemoryCacheImageInputStream(new ByteArrayInputStream(data))) {
+            Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
+            if (!readers.hasNext()) {
+                throw new IOException("unsupported image format");
+            }
+            ImageReader reader = readers.next();
+            try {
+                reader.setInput(iis, true, true);
+                myWidth = reader.getWidth(0);
+                myHeight = reader.getHeight(0);
+            } finally {
+                reader.dispose();
+            }
+        }
+    }
+
+    /** decodes in memory, avoids ImageIO's temporary file cache */
+    private static BufferedImage readImage(byte[] data) throws IOException {
+        // ImageIO.read closes the stream itself
+        return ImageIO.read(new MemoryCacheImageInputStream(new ByteArrayInputStream(data)));
     }
 
     public int getHeight() {
@@ -94,17 +123,27 @@ public class FBitmap implements FID, FImage {
         return myData;
     }
 
-    public BufferedImage getImage() {
+    public synchronized BufferedImage getImage() {
+        if (myPending != null) {
+            try {
+                myImage = readImage(myPending);
+            } catch (Exception e) {
+                System.out.println("Data Error: ID:" + myID + " : " + e.getMessage());
+                myImage = null;
+            }
+            myPending = null;
+        }
         return myImage;
     }
 
-    public void setImage(BufferedImage aImage) {
+    public synchronized void setImage(BufferedImage aImage) {
+        myPending = null;
         myImage = aImage;
     }
 
-    public String toString() {
-        if (myImage != null) {
-            return "H: " + myImage.getWidth() + " W: " + myImage.getHeight();
+    public synchronized String toString() {
+        if (myImage != null || myPending != null) {
+            return "H: " + myWidth + " W: " + myHeight;
         } else {
             return "Null Image";
         }
