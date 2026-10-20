@@ -156,11 +156,7 @@ public class BitLibrary {
 
     // Read N amount of 8 Bit Numbers (Unsigned)
     public byte[] uiBytes(int n) throws IOException {
-        byte[] myArray = new byte[n];
-        for (int x = 0; x < n; x++) {
-            myArray[x] = (byte) ui8();
-        }
-        return myArray;
+        return myBitInput.readBytes2(n);
     }
 
     // Read N amount of 8 Bit Numbers (Unsigned)

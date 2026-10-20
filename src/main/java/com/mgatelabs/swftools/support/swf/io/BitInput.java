@@ -17,8 +17,10 @@ package com.mgatelabs.swftools.support.swf.io;
 
 // Program Infomration
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.zip.InflaterInputStream;
 
 import com.mgatelabs.swftools.exploit.control.AppControl;
@@ -62,13 +64,13 @@ public class BitInput {
     public void useCompressedStream() {
         //myStreams.push(myStream);
         // Make a new Compressed Stream by wrapping the old
-        myStream = new InflaterInputStream(myStream);
+        myStream = new BufferedInputStream(new InflaterInputStream(myStream));
     }
 
     public void zipStream() {
         //myStreams.push(myStream);
         // Make a new Compressed Stream by wrapping the old
-        myStream = new InflaterInputStream(myStream);
+        myStream = new BufferedInputStream(new InflaterInputStream(myStream));
         //System.out.println("Compres->"+myStream);
     }
 
@@ -94,9 +96,10 @@ public class BitInput {
     public int[] readBytes(int size) throws IOException {
         offset = 0;
         //bitsRead+=size;
+        byte[] bytes = readBytes2(size);
         int[] result = new int[size];
         for (int x = 0; x < size; x++) {
-            result[x] = readByte();
+            result[x] = bytes[x] & 0xFF;
         }
         //myStream.read(result,0, size);
         return result;
@@ -107,9 +110,10 @@ public class BitInput {
         offset = 0;
         //bitsRead+=size;
         byte[] result = new byte[size];
-        for (int x = 0; x < size; x++) {
-            result[x] = (byte) readByte();
-        }
+        int n = myStream.readNBytes(result, 0, size);
+        // Past EOF, single byte reads used to yield 0xFF
+        Arrays.fill(result, n, size, (byte) 0xFF);
+        bitsRead += size;
         return result;
     }
 
@@ -209,8 +213,18 @@ public class BitInput {
     public void skip(long bytes) throws IOException {
         // Align the Bit Stream
         align();
-        // Skip Bytes
-        myStream.skip(bytes);
+        // Skip Bytes, buffered/inflater streams may skip fewer than requested
+        long remaining = bytes;
+        while (remaining > 0) {
+            long skipped = myStream.skip(remaining);
+            if (skipped <= 0) {
+                if (myStream.read() == -1) {
+                    break;
+                }
+                skipped = 1;
+            }
+            remaining -= skipped;
+        }
         // Update Bytes Read Count
         bitsRead += bytes;
     }

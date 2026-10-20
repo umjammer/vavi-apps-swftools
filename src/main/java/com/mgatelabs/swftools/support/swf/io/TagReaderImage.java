@@ -13,11 +13,6 @@
 
 package com.mgatelabs.swftools.support.swf.io;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -65,11 +60,7 @@ public class TagReaderImage {
         // Version 0, JPEGTable
         if (version == 0) {
             // Make a JPEGTable Object
-            JPEGTable = new byte[sizeOfBlock];
-            // Loop Through and Read the Table
-            for (int x = 0; x < sizeOfBlock; x++) {
-                JPEGTable[x] = (byte) bl.ui8();
-            }
+            JPEGTable = bl.uiBytes(sizeOfBlock);
             // Return Nothing
             return null;
         } else {
@@ -101,34 +92,21 @@ public class TagReaderImage {
                 if (JPEGTable.length > 0) {
                     bitTable = new byte[(sizeOfData - 2) + (JPEGTable.length - 2)];
 
-                    // Skip the last two bytes
-                    for (int x = 0; x < (JPEGTable.length - 2); x++) {
-                        // Copy the JPEGTable Over to the Data
-                        bitTable[x] = JPEGTable[x];
-                    }
+                    // Skip the last two bytes, Copy the JPEGTable Over to the Data
+                    System.arraycopy(JPEGTable, 0, bitTable, 0, JPEGTable.length - 2);
                     // Skip the first two bytes
                     bi.skip(2);
                     // Read the Data
-                    for (int x = 0; x < (sizeOfData - 2); x++) {
-                        // Read the bits
-                        bitTable[x + (JPEGTable.length - 2)] = (byte) bl.ui8();
-                    }
+                    byte[] data = bl.uiBytes(sizeOfData - 2);
+                    System.arraycopy(data, 0, bitTable, JPEGTable.length - 2, data.length);
                 } else {
-                    bitTable = new byte[sizeOfData];
-                    for (int x = 0; x < sizeOfData; x++) {
-                        bitTable[x] = (byte) bl.ui8();
-                    }
+                    bitTable = bl.uiBytes(sizeOfData);
                 }
 
                 sizeOfData = bitTable.length;
             } else if (version == 2 || version == 3) {// Version 2 & 3 Include their own JPEGTables
-                bitTable = new byte[sizeOfData];
-                // Offset Variable
-                int offsetX = 0;
                 //  Read the Bytes
-                for (int x = 0; x < sizeOfData; x++) {
-                    bitTable[x] = (byte) bl.ui8();
-                }
+                bitTable = bl.uiBytes(sizeOfData);
 
             	/*
                int trueStart = 0;
@@ -163,17 +141,20 @@ public class TagReaderImage {
             }
             if (trueStart > 0) {
                 byte[] temp = new byte[sizeOfData - trueStart];
-                for (int x = 0; x < temp.length; x++) {
-                    temp[x] = bitTable[x + trueStart];
-                }
+                System.arraycopy(bitTable, trueStart, temp, 0, temp.length);
                 bitTable = temp;
             }
 
             // Extra Data Check
-            int removePosition;
+            int removePosition = 0;
+            int searchStart = 4;
             do {
+                // Bytes before the last removal can't form a new marker, resume near it
+                if (removePosition > 0) {
+                    searchStart = Math.max(4, removePosition - 3);
+                }
                 removePosition = 0;
-                for (int x = 4; x < bitTable.length - 4; x++) {
+                for (int x = searchStart; x < bitTable.length - 4; x++) {
 
                     if (
                             ((bitTable[x] & 0xFF) == 0xFF) &&
@@ -188,16 +169,8 @@ public class TagReaderImage {
 
                 if (removePosition > 0) {
                     byte[] temp = new byte[bitTable.length - 4];
-
-                    for (int x = 0; x < removePosition; x++) {
-                        temp[x] = bitTable[x];
-                    }
-                    int i = removePosition;
-                    for (int x = removePosition + 4; x < bitTable.length; x++) {
-                        temp[i] = bitTable[x];
-                        i++;
-                    }
-
+                    System.arraycopy(bitTable, 0, temp, 0, removePosition);
+                    System.arraycopy(bitTable, removePosition + 4, temp, removePosition, bitTable.length - removePosition - 4);
                     bitTable = temp;
                 }
             }
@@ -218,9 +191,6 @@ public class TagReaderImage {
                 int h = aBitmap.getHeight();
 
                 BufferedImage lImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D g2D = lImage.createGraphics(); // Context for buffered image
-                // Clear image with transparent alpha by drawing a rectangle
-                Rectangle2D.Double rect = new Rectangle2D.Double(0, 0, 1, 1);
 
                 //aLossless.setImage(lImage);
 
@@ -234,30 +204,17 @@ public class TagReaderImage {
 
                 aBi.zipStream();
 
-                int s, r, g, b, col;
-                //int [] bits = new int[4];
-                //int alpha = 255;
-                Color aColor;
-
                 //System.out.println("Image Size: " + w + ":" + h + "\n");
 
+                // Write pixels directly, one Graphics2D fill per pixel is very slow
+                int[] row = new int[w];
                 for (int y = 0; y < h; y++) {
+                    origImage.getRGB(0, y, w, 1, row, 0, w);
+                    byte[] alphas = aBi.readBytes2(w);
                     for (int x = 0; x < w; x++) {
-                        col = origImage.getRGB(x, y);
-
-                        s = (int) aBi.readBits(8, false);
-
-                        r = ((col >> 16) & 0xff);
-                        g = ((col >> 8) & 0xff);
-                        b = ((col) & 0xff);
-
-                        aColor = new Color(r, g, b);
-                        g2D.setPaint(aColor);
-                        rect.setRect(x, y, 1, 1);
-                        g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, s / 255.0f));
-                        //g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255.0f )); //
-                        g2D.fill(rect);
+                        row[x] = ((alphas[x] & 0xff) << 24) | (row[x] & 0xffffff);
                     }
+                    lImage.setRGB(0, y, w, 1, row, 0, w);
                 }
                 aBitmap.setImage(lImage);
             }
@@ -442,14 +399,6 @@ public class TagReaderImage {
 
             // Create image with RGB and alpha channel
             BufferedImage aImage = new BufferedImage(width, height, version == 2 ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2D = aImage.createGraphics(); // Context for buffered image
-            // Set best alpha interpolation quality
-            g2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-
-            // Clear image with transparent alpha by drawing a rectangle
-            g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.0f));
-            Rectangle2D.Double rect = new Rectangle2D.Double(0, 0, width, height);
-            g2D.fill(rect);
 
             aLossless.setImage(aImage);
 
@@ -465,12 +414,13 @@ public class TagReaderImage {
 
             aBi.zipStream();
 
-            FColor[] myColors = new FColor[colorMapCount];
+            int[] myColors = new int[colorMapCount];
             FColor aColor;
             //System.out.println("colors:"+ colorMapCount);
 
             for (int x = 0; x < colorMapCount; x++) {
-                myColors[x] = aTypeReader.rgba(version == 1 ? 1 : 3);
+                aColor = aTypeReader.rgba(version == 1 ? 1 : 3);
+                myColors[x] = (aColor.getA() << 24) | (aColor.toColor().getRGB() & 0xffffff);
                 //System.out.print(myColors[x]);
             }
 
@@ -481,18 +431,16 @@ public class TagReaderImage {
             skipSize = 4 - (width & 3);
 
             int index;
+            int[] row = new int[width];
             for (int y = 0; y < height; y++) {
+                byte[] indices = aBi.readBytes2(width);
                 for (int x = 0; x < width; x++) {
-                    index = (int) aBl.ui8();
+                    index = indices[x] & 0xff;
                     //index--;
-                    if (index >= 0 && index < colorMapCount) {
-                        aColor = myColors[index];
-                        g2D.setPaint(aColor.toColor());
-                        rect.setRect(x, y, 1, 1);
-                        g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, aColor.getA() / 255.0f)); //
-                        g2D.fill(rect);
-                    }
+                    // out of range indices are left transparent
+                    row[x] = index < colorMapCount ? myColors[index] : 0;
                 }
+                aImage.setRGB(0, y, width, 1, row, 0, width);
 
                 if ((width & 3) != 0) {
                     aBi.skip(skipSize);
@@ -503,9 +451,6 @@ public class TagReaderImage {
         } else if (format == 4) {
             FLossless aLossless = new FLossless(version, id, format, width, height);
             BufferedImage aImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2D = aImage.createGraphics(); // Context for buffered image
-            // Clear image with transparent alpha by drawing a rectangle
-            Rectangle2D.Double rect = new Rectangle2D.Double(0, 0, width, height);
 
             aLossless.setImage(aImage);
 
@@ -520,34 +465,22 @@ public class TagReaderImage {
             int s, r, g, b;
             //int [] bits = new int[4];
             //int alpha = 255;
-            Color aColor;
+            int[] row = new int[width];
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     s = (int) aBi.readBits(1, false);
                     r = (int) aBi.readBits(5, false);
                     g = (int) aBi.readBits(5, false);
                     b = (int) aBi.readBits(5, false);
-                    aColor = new Color((int) ((r / 31.0f) * 255), (int) ((g / 31.0f) * 255), (int) ((b / 31.0f) * 255));
-                    g2D.setPaint(aColor);
-                    rect.setRect(x, y, 1, 1);
-                    //g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255.0f )); //
-                    g2D.fill(rect);
+                    row[x] = 0xff000000 | ((int) ((r / 31.0f) * 255) << 16) | ((int) ((g / 31.0f) * 255) << 8) | (int) ((b / 31.0f) * 255);
                 }
+                aImage.setRGB(0, y, width, 1, row, 0, width);
             }
             return aLossless;
         } else if (format == 5) {
             FLossless aLossless = new FLossless(version, id, format, width, height);
             // Create image with RGB and alpha channel
             BufferedImage aImage = new BufferedImage(width, height, (version == 2) ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2D = aImage.createGraphics(); // Context for buffered image
-            // Set best alpha interpolation quality
-            g2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-            // Clear image with transparent alpha by drawing a rectangle
-            Rectangle2D.Double rect = new Rectangle2D.Double(0, 0, width, height);
-            if (version == 2) {
-                g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.0f));
-                g2D.fill(rect);
-            }
             aLossless.setImage(aImage);
 
             byte[] myDataBlock = bl.uiBytes(blockSize);
@@ -558,25 +491,18 @@ public class TagReaderImage {
 
             aBi.zipStream();
 
-            int[] bits = new int[4];
             int alpha = 255;
-            Color aColor;
+            int[] row = new int[width];
             for (int y = 0; y < height; y++) {
+                byte[] bits = aBi.readBytes2(width * 4);
                 for (int x = 0; x < width; x++) {
-                    for (int z = 0; z < 4; z++) {
-                        bits[z] = (int) aBl.ui8();
-                    }
-
+                    int i = x * 4;
                     if (version == 2) {
-                        alpha = bits[0];
+                        alpha = bits[i] & 0xff;
                     }
-                    aColor = new Color(bits[1], bits[2], bits[3]);
-
-                    g2D.setPaint(aColor);
-                    rect.setRect(x, y, 1, 1);
-                    g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255.0f)); //
-                    g2D.fill(rect);
+                    row[x] = (alpha << 24) | ((bits[i + 1] & 0xff) << 16) | ((bits[i + 2] & 0xff) << 8) | (bits[i + 3] & 0xff);
                 }
+                aImage.setRGB(0, y, width, 1, row, 0, width);
             }
 
             return aLossless;
